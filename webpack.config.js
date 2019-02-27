@@ -7,6 +7,7 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist')
   },
+  devtool: process.env.NODE_ENV !== 'production' ? 'inline-source-map' : false,
   devServer: {
     hotOnly: true
     /* Proxy to a backend, add appropriate url and port
