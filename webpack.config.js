@@ -8,6 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   devServer: {
+    hotOnly: true
     /* Proxy to a backend, add appropriate url and port
     proxy: {
       '**': 'http://127.0.0.1:8000/'
