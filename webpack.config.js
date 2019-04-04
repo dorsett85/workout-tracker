@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -6,10 +7,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Function to get plugins (some conditionally for production)
 const getPlugins = (devMode) => {
   const plugins = [
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public/index.html'),
       favicon: path.resolve(__dirname, 'public/favicon.png'),
-      title: 'Webpack Boilerplate'
+      title: 'Workout Tracker'
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? '[name].css' : '[name].[hash].css',
@@ -25,6 +27,11 @@ module.exports = (env, options) => {
   return {
     output: {
       publicPath: '/static/'
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
     },
     devtool: devMode ? 'inline-source-map' : false,
     devServer: {
@@ -45,6 +52,7 @@ module.exports = (env, options) => {
         {
           test: /\.js$/,
           include: path.resolve(__dirname, 'src'),
+          use: ['babel-loader']
         },
         {
           test: /\.scss$/,
@@ -59,6 +67,15 @@ module.exports = (env, options) => {
               }
             },
             'sass-loader'
+          ]
+        },
+        // Vendor specific css
+        {
+          test: /\.css$/,
+          include: path.resolve(__dirname, 'src/assets/css/vendor.css'),
+          use: [
+            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+            'css-loader'
           ]
         },
         {

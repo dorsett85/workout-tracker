@@ -1,15 +1,8 @@
-import { SampleComponent } from './components/SampleComponent';
-import styles from 'assets/css/app.scss';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
+import 'assets/css/vendor.css';
 
-/**
- * Add app initializing functionality here
- */
-document.body.onload = () => {
-  document.getElementById('app').insertAdjacentHTML('afterbegin', `
-    <div class="${styles.appContainer}">
-      <div>
-        ${SampleComponent}
-      </div>
-    </div>
-  `);
-};
+
+ReactDOM.render(<App />, document.getElementById('app'));
+module.hot.accept();
