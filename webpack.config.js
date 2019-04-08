@@ -9,8 +9,8 @@ const getPlugins = (devMode) => {
   const plugins = [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public/index.html'),
-      favicon: path.resolve(__dirname, 'public/favicon.png'),
+      template: path.resolve(__dirname, 'frontend/src/index.html'),
+      favicon: path.resolve(__dirname, 'frontend/src/assets/img/favicon.png'),
       title: 'Workout Tracker'
     }),
     new MiniCssExtractPlugin({
@@ -25,6 +25,7 @@ const getPlugins = (devMode) => {
 module.exports = (env, options) => {
   const devMode = options.mode === 'development';
   return {
+    entry: path.resolve(__dirname, 'frontend/src/index.js'),
     output: {
       publicPath: '/static/'
     },
@@ -35,6 +36,7 @@ module.exports = (env, options) => {
     },
     devtool: devMode ? 'inline-source-map' : false,
     devServer: {
+      historyApiFallback: true,
       contentBase: path.resolve(__dirname, 'dist')
       /* Proxy to a backend, add appropriate url and port
       proxy: {
@@ -44,19 +46,20 @@ module.exports = (env, options) => {
     },
     resolve: {
       alias: {
-        assets: path.resolve(__dirname, 'src/assets')
+        assets: path.resolve(__dirname, 'frontend/src/assets'),
+        state: path.resolve(__dirname, 'frontend/src/state')
       }
     },
     module: {
       rules: [
         {
           test: /\.js$/,
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve(__dirname, 'frontend/src'),
           use: ['babel-loader']
         },
         {
           test: /\.scss$/,
-          include: path.resolve(__dirname, 'src'),
+          include: path.resolve(__dirname, 'frontend/src'),
           use: [
             devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
             {
@@ -72,7 +75,7 @@ module.exports = (env, options) => {
         // Vendor specific css
         {
           test: /\.css$/,
-          include: path.resolve(__dirname, 'src/assets/css/vendor.css'),
+          include: path.resolve(__dirname, 'frontend/src/assets/css/vendor.css'),
           use: [
             devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
             'css-loader'

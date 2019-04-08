@@ -1,7 +1,7 @@
 {
   "name": "workout-tracker",
   "version": "1.0.0",
-  "description": "Track workout with MongoDB and React",
+  "description": "Track workout with React and MongoDB",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
@@ -11,7 +11,9 @@
   },
   "keywords": [
     "webpack",
-    "template"
+    "react",
+    "redux",
+    "mongoDB"
   ],
   "author": "Clayton Phillips-Dorsett",
   "license": "ISC",
@@ -42,9 +44,14 @@
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "express": "^4.16.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-redux": "^6.0.1",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1"
   }
 }

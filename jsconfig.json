@@ -2,9 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "components/*": ["./src/components/*"],
-      "assets/*": ["./src/assets/*"]
+      "assets/*": ["./frontend/src/assets/*"],
+      "state/*": ["frontend/src/state/*"]
     }
   },
-  "include": ["src"]
+  "include": ["./frontend/src"]
 }
