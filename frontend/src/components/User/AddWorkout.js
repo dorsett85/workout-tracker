@@ -26,7 +26,8 @@ class AddWorkout extends React.Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const { title } = this.state;
     this.props.addWorkout({ title, created: new Date() });
     this.props.handleClose();
@@ -38,30 +39,33 @@ class AddWorkout extends React.Component {
     const { handleChange, handleSubmit } = this;
     return (
       <Row>
-        <Col xs={12} md={6}>
-          <InputGroup>
-            <FormControl
-              onChange={handleChange}
-              value={title}
-              placeholder="Enter workout name"
-            />
-            <InputGroup.Append>
-              {title && (
+        <Col xs={12} md={4}>
+          <form onSubmit={handleSubmit}>
+            <InputGroup>
+              <FormControl
+                onChange={handleChange}
+                value={title}
+                placeholder="Enter workout name"
+              />
+              <InputGroup.Append>
+                {title && (
+                  <Button
+                    type="submit"
+                    variant="outline-success"
+                    onClick={handleSubmit}
+                  >
+                    {'\u2713'}
+                  </Button>
+                )}
                 <Button
-                  variant="outline-success"
-                  onClick={handleSubmit}
+                  variant="outline-danger"
+                  onClick={handleClose}
                 >
-                  {'\u2713'}
+                  {'X'}
                 </Button>
-              )}
-              <Button
-                variant="outline-danger"
-                onClick={handleClose}
-              >
-                {'X'}
-              </Button>
-            </InputGroup.Append>
-          </InputGroup>
+              </InputGroup.Append>
+            </InputGroup>
+          </form>
         </Col>
       </Row>
     );

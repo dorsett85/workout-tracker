@@ -37,12 +37,10 @@ module.exports = (env, options) => {
     devtool: devMode ? 'inline-source-map' : false,
     devServer: {
       historyApiFallback: true,
-      contentBase: path.resolve(__dirname, 'dist')
-      /* Proxy to a backend, add appropriate url and port
+      contentBase: path.resolve(__dirname, 'dist'),
       proxy: {
-        '**': 'http://127.0.0.1:8000/'
+        '**': 'http://localhost:3000/'
       }
-      */
     },
     resolve: {
       alias: {

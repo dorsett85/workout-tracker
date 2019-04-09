@@ -20,7 +20,7 @@ export default class NavHeader extends React.Component {
   render() {
     const { handleLinkClick } = this;
     return (
-      <Navbar bg="success" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Navbar.Brand>
           <img
             className={styles.navbarImg}

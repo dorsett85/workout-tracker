@@ -1,17 +1,9 @@
-import { ADD_WORKOUT } from '../constants/action-types';
+import { combineReducers } from 'redux';
+import user from './user';
+import workouts from './workouts';
 
 
-const initialState = {
-  workouts: []
-};
-
-const rootReducer = (state = initialState, { type, payload }) => {
-  if (type === ADD_WORKOUT) {
-    return Object.assign({}, state, {
-      workouts: state.workouts.concat(payload)
-    });
-  }
-  return state;
-};
-
-export default rootReducer;
+export default combineReducers({
+  user,
+  workouts
+});

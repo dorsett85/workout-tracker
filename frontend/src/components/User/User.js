@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Col, Row, Card, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import WorkoutList from './WorkoutList';
 import AddWorkout from './AddWorkout';
 
 
-const mapStateToProps = state => (
-  { workouts: state.workouts }
+const mapStateToProps = ({ user }) => (
+  { user }
 );
 
 class User extends React.Component {
@@ -25,34 +26,20 @@ class User extends React.Component {
 
   render() {
     const { addingWorkout } = this.state;
-    const { user, workouts } = this.props;
+    const { user } = this.props;
     const { handleToggleNewWorkout } = this;
     return (
-      <Col xs={12} md={8}>
-        <h2>Welcome {user}</h2>
-        <p>
-          <span>Here are your saved workouts</span>
-        </p>
-        <Row>
-          {workouts && workouts.map(({ title, created }) => (
-            <Col key={created} xs={12} md={4}>
-              <Card>
-                <Card.Header>{title}</Card.Header>
-                <Card.Body>
-                  {created.toDateString()}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-        <hr />
-        <div>
+      <>
+        <h2>Welcome {user.name}</h2>
+        <div className="mt-3">
           {!addingWorkout
-            ? <Button variant="outline-primary" onClick={handleToggleNewWorkout}>Add Workout</Button>
+            ? <Button variant="success" onClick={handleToggleNewWorkout}>Add Workout</Button>
             : <AddWorkout handleClose={handleToggleNewWorkout} />
           }
         </div>
-      </Col>
+        <hr />
+        <WorkoutList />
+      </>
     );
   }
 }
@@ -60,6 +47,5 @@ class User extends React.Component {
 export default connect(mapStateToProps)(User);
 
 User.propTypes = {
-  user: PropTypes.object.isRequired,
-  workouts: PropTypes.array.isRequired
+  user: PropTypes.object.isRequired
 };
