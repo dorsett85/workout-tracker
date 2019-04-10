@@ -1,11 +1,30 @@
 const express = require('express');
 const path = require('path');
+const { server: { port } } = require('../config.js');
+const dbConnect = require('./db/db');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
 
 const app = express();
-const port = 3000;
-const HTML_DIR = path.resolve(__dirname, '../dist');
-app.use('/static', express.static(HTML_DIR));
+app.use('/static', express.static(path.resolve(__dirname, '../dist')));
 
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../dist/index.html')));
+// Connect to the database and send error route on failure
+dbConnect()
+  .then((db) => {
+    app.use((req, res, next) => {
+      req.db = db;
+      next();
+    });
+    app.use('/api', apiRouter);
+    app.use('/', indexRouter);
+  })
+  .catch((err) => {
+    /**
+     * TODO
+     * Add a database error route
+     */
+    console.log(err);
+    app.get('*', (req, res) => res.send('Could not connect to the database!'));
+  });
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
