@@ -1,8 +1,6 @@
 const router = require('express').Router();
 
-router.get('/*', (req, res) => {
-  console.log('got the db')
-  console.log(Object.keys(req.db));
+router.post('/register', (req, res) => {
   res.send('adf');
 });
 

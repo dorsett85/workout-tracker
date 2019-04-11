@@ -5,6 +5,7 @@ import styles from 'assets/css/app.scss';
 import NavHeader from './NavHeader';
 import Landing from './Landing/Landing';
 import Login from './Login/Login';
+import Register from './Register/Register';
 import User from './User/User';
 
 
@@ -17,6 +18,7 @@ const App = () => (
           <Col>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
             <Route path="/guest" component={User} />
             <Route exact path="/user/:id" component={User} />
           </Col>

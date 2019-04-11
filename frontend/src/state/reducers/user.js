@@ -1,4 +1,4 @@
-import { LOGIN_USER } from '../actions/action-types';
+import { LOGIN_USER, REGISTER_USER } from '../actions/action-types';
 
 
 const initialState = {
@@ -7,6 +7,9 @@ const initialState = {
 
 const user = (state = initialState, { type, payload }) => {
   if (type === LOGIN_USER) {
+    return { ...payload };
+  }
+  if (type === REGISTER_USER) {
     return { ...payload };
   }
   return state;

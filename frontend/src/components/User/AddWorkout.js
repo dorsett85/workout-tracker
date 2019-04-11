@@ -9,7 +9,6 @@ const mapDispatchToProps = dispatch => (
   { addWorkout: workout => dispatch(addWorkout(workout)) }
 );
 
-
 class AddWorkout extends React.Component {
   constructor(props) {
     super(props);

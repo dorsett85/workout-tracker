@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const { server: { port } } = require('../config.js');
 const dbConnect = require('./db/db');
 const indexRouter = require('./routes/index');
@@ -15,6 +16,8 @@ dbConnect()
       req.db = db;
       next();
     });
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
     app.use('/api', apiRouter);
     app.use('/', indexRouter);
   })
@@ -23,7 +26,7 @@ dbConnect()
      * TODO
      * Add a database error route
      */
-    console.log(err);
+    // console.log(err);
     app.get('*', (req, res) => res.send('Could not connect to the database!'));
   });
 
