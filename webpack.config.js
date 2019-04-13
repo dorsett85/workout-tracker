@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -7,7 +6,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Function to get plugins (some conditionally for production)
 const getPlugins = (devMode) => {
   const plugins = [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'frontend/src/index.html'),
       favicon: path.resolve(__dirname, 'frontend/src/assets/img/favicon.png'),

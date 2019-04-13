@@ -83,7 +83,7 @@ class Register extends React.Component {
       ...validateInputs
     });
 
-    if (true || formIsValid) {
+    if (formIsValid) {
       postFetch({
         url: '/api/register',
         body: {
