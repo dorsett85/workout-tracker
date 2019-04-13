@@ -4,7 +4,8 @@ const { db: { connectionString } } = require('../../config');
 
 const dbConnect = async () => {
   try {
-    return MongoClient.connect(connectionString, { useNewUrlParser: true });
+    const client = await MongoClient.connect(connectionString, { useNewUrlParser: true });
+    return client.db(client.s.databaseName);
   } catch (err) {
     return err;
   }

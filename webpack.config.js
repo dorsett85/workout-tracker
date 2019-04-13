@@ -45,7 +45,8 @@ module.exports = (env, options) => {
     resolve: {
       alias: {
         assets: path.resolve(__dirname, 'frontend/src/assets'),
-        state: path.resolve(__dirname, 'frontend/src/state')
+        state: path.resolve(__dirname, 'frontend/src/state'),
+        api: path.resolve(__dirname, 'frontend/src/api')
       }
     },
     module: {

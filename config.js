@@ -9,14 +9,14 @@ const development = {
     port: 3000
   },
   db: {
-    connectionString: 'mongodb://localhost:27017/local'
+    connectionString: 'mongodb://localhost:27017/workout-tracker'
   }
 };
 
 const production = {
   ...development,
   db: {
-    connectionString: 'mongodb://localhost:27017/local'
+    connectionString: 'mongodb://localhost:27017/workout-tracker'
   }
 };
 

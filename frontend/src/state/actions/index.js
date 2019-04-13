@@ -1,12 +1,8 @@
-import { LOGIN_USER, REGISTER_USER, ADD_WORKOUT } from './action-types';
+import { LOGIN_USER, ADD_WORKOUT } from './action-types';
 
 
 const loginUser = payload => (
   { type: LOGIN_USER, payload }
-);
-
-const registerUser = payload => (
-  { type: REGISTER_USER, payload }
 );
 
 const addWorkout = payload => (
@@ -15,6 +11,5 @@ const addWorkout = payload => (
 
 export {
   loginUser,
-  registerUser,
   addWorkout
 };

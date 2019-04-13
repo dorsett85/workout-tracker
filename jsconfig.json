@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "assets/*": ["./frontend/src/assets/*"],
-      "state/*": ["frontend/src/state/*"]
+      "state/*": ["frontend/src/state/*"],
+      "api/*": ["frontend/src/api/*"]
     }
   },
   "include": ["./frontend/src"]

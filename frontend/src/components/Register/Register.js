@@ -3,19 +3,41 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { registerUser } from 'state/actions/index';
+import { loginUser } from 'state/actions/index';
+import { postFetch } from 'api';
+import FormInput from '../UI/FormInput';
 
 
 const mapDispatchToProps = dispatch => (
-  { registerUser: user => dispatch(registerUser(user)) }
+  { loginUser: user => dispatch(loginUser(user)) }
 );
 
 class Register extends React.Component {
+  static checkInputError(id, value) {
+    const lengthErr = value.length < 5 && 'Must be at least 4 character';
+    const spaceErr = /[\s]/.test(value) && 'Cannot contain spaces';
+    const specialCharErr = /[!@#$%^&*]/.test(value) ? false : 'Must contain a special character (!@#$%^&*)';
+    const inputError = id === 'username'
+      ? [lengthErr, spaceErr].find(err => err !== false)
+      : [lengthErr, spaceErr, specialCharErr].find(err => err !== false);
+    return {
+      isValid: !inputError,
+      inputError
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       username: '',
+      usernameIsValid: null,
+      usernameIsInvalid: null,
+      usernameError: '',
       password: '',
+      passwordIsValid: null,
+      passwordIsInvalid: null,
+      passwordError: '',
+      validatingForm: false,
       registering: false
     };
     this.handleInput = this.handleInput.bind(this);
@@ -24,20 +46,73 @@ class Register extends React.Component {
 
   handleInput(e) {
     const { id, value } = e.target;
+    const { validatingForm } = this.state;
     this.setState({
-      [id]: value
+      [id]: value,
     });
+    if (validatingForm) {
+      const { isValid, inputError } = Register.checkInputError(id, value);
+      this.setState({
+        [`${id}IsValid`]: isValid,
+        [`${id}IsInvalid`]: !isValid,
+        [`${id}Error`]: inputError
+      });
+    }
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const { username, password } = this.state;
-    this.props.registerUser({ username, password });
+    const { username, password } = e.currentTarget.elements;
+    let formIsValid = true;
+
+    // Check validity of inputs and invalidate form if any aren't valid
+    const validateInputs = [username, password].reduce((acc, { id, value }) => {
+      const { isValid, inputError } = Register.checkInputError(id, value);
+      if (formIsValid) { formIsValid = isValid; }
+      return {
+        ...acc,
+        [`${id}IsValid`]: isValid,
+        [`${id}IsInvalid`]: !isValid,
+        [`${id}Error`]: inputError
+      };
+    }, {});
+
+    // Set form validity and start validing inputs on any change
+    this.setState({
+      validatingForm: true,
+      ...validateInputs
+    });
+
+    if (true || formIsValid) {
+      postFetch({
+        url: '/api/register',
+        body: {
+          username: this.state.username,
+          password: this.state.password
+        },
+        success: (data) => {
+          console.log(data);
+          // this.props.loginUser({ username, password });
+        },
+        error: ({ status, message }) => {
+          if (status === 403) {
+            this.setState({
+              usernameIsValid: false,
+              usernameIsInvalid: true,
+              usernameError: message
+            });
+          }
+        }
+      });
+    }
   }
 
   render() {
     const { handleInput, handleSubmit } = this;
-    const { username, password } = this.state;
+    const {
+      username, usernameIsValid, usernameIsInvalid, usernameError,
+      password, passwordIsValid, passwordIsInvalid, passwordError
+    } = this.state;
     return (
       <Row>
         <Col xs={12} md={4}>
@@ -47,22 +122,28 @@ class Register extends React.Component {
             <Link to="/login">here</Link>
           </p>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                onChange={handleInput}
-                value={username}
-                placeholder="Enter username"
-              />
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                onChange={handleInput}
-                value={password}
-                placeholder="Enter password"
-              />
-            </Form.Group>
+            <FormInput
+              id="username"
+              label="Username"
+              onChange={handleInput}
+              value={username}
+              placeholder="Enter username"
+              isValid={usernameIsValid}
+              isInvalid={usernameIsInvalid}
+              errFeedback={usernameError}
+              maxLength={12}
+            />
+            <FormInput
+              id="password"
+              label="Password"
+              onChange={handleInput}
+              value={password}
+              placeholder="Enter password"
+              isValid={passwordIsValid}
+              isInvalid={passwordIsInvalid}
+              errFeedback={passwordError}
+              maxLength={12}
+            />
             <Button type="submit">Register</Button>
           </Form>
         </Col>
@@ -71,8 +152,8 @@ class Register extends React.Component {
   }
 }
 
-export default connect(mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(Register);
 
 Register.propTypes = {
-  registerUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired
 };
