@@ -1,4 +1,4 @@
-import { LOGIN_USER } from '../actions/action-types';
+import { CHANGE_USER } from '../actions/action-types';
 
 
 const initialState = {
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const user = (state = initialState, { type, payload }) => {
-  if (type === LOGIN_USER) {
+  if (type === CHANGE_USER) {
     return { ...payload };
   }
   return state;

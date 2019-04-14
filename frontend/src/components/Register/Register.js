@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { loginUser } from 'state/actions/index';
+import { changeUser } from 'state/actions/index';
 import { postFetch } from 'api';
 import FormInput from '../UI/FormInput';
 
 
 const mapDispatchToProps = dispatch => (
-  { loginUser: user => dispatch(loginUser(user)) }
+  { changeUser: user => dispatch(changeUser(user)) }
 );
 
 class Register extends React.Component {
@@ -91,11 +91,13 @@ class Register extends React.Component {
           password: this.state.password
         },
         success: (data) => {
-          console.log(data);
-          // this.props.loginUser({ username, password });
+          this.props.changeUser({
+            id: data.id,
+            username: data.username
+          });
         },
         error: ({ status, message }) => {
-          if (status === 403) {
+          if (status === 409) {
             this.setState({
               usernameIsValid: false,
               usernameIsInvalid: true,
@@ -155,5 +157,5 @@ class Register extends React.Component {
 export default connect(null, mapDispatchToProps)(Register);
 
 Register.propTypes = {
-  loginUser: PropTypes.func.isRequired
+  changeUser: PropTypes.func.isRequired
 };

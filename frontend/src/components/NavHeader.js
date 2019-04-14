@@ -35,6 +35,7 @@ export default class NavHeader extends React.Component {
           <Nav className="ml-auto">
             <Nav.Link onClick={() => handleLinkClick('/')}>Home</Nav.Link>
             <Nav.Link onClick={() => handleLinkClick('/login')}>Login</Nav.Link>
+            <Nav.Link onClick={() => handleLinkClick('/register')}>Register</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -1,15 +1,38 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 
+
+router.post('/login', async (req, res) => {
+  const { db } = req;
+  const { username, password } = req.body;
+  const users = db.collection('users');
+
+  // Check if user exists
+  const user = await users.findOne({ username });
+  if (!user) {
+    return res.json({
+      username: false
+    });
+  }
+
+  // Check if the password matches
+  const passwordIsValid = await bcrypt.compare(password, user.password);
+  return res.json({
+    id: user._id,
+    username,
+    password: passwordIsValid
+  });
+});
+
 router.post('/register', async (req, res) => {
   const { db } = req;
   const { username, password } = req.body;
   const users = db.collection('users');
 
   // Check if username already exists
-  let newUser = await users.find({ username }).toArray();
-  if (newUser.length) {
-    return res.status(403).json({
+  let newUser = await users.findOne({ username });
+  if (newUser) {
+    return res.status(409).json({
       message: 'User already exists'
     });
   }
@@ -21,7 +44,10 @@ router.post('/register', async (req, res) => {
     username,
     password: hashPassword
   });
-  return res.json(username);
+  return res.json({
+    id: newUser.insertedId,
+    username
+  });
 });
 
 module.exports = router;

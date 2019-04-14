@@ -31,10 +31,16 @@ const ajaxFetch = ({ url, options, success, error }) => (
       const { status, statusText } = err;
 
       /**
+       * First check if the error comes from the success function (e.g., it won't have a status text).
+       * We simply post these to the console as usual
+       */
+      if (!statusText) { return console.error(err); }
+
+      /**
        * Try converting the error object to json for the error callback, if it fails (e.g., it's
        * a 500 internal server error), return the unconverted object for the error callback
        */
-      err.json()
+      return err.json()
         .then((json) => {
           // If the json response is a string, convert it to the message property
           const errObj = typeof json === 'string' ? { message: json } : json;

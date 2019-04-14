@@ -1,8 +1,8 @@
-import { LOGIN_USER, ADD_WORKOUT } from './action-types';
+import { CHANGE_USER, ADD_WORKOUT } from './action-types';
 
 
-const loginUser = payload => (
-  { type: LOGIN_USER, payload }
+const changeUser = payload => (
+  { type: CHANGE_USER, payload }
 );
 
 const addWorkout = payload => (
@@ -10,6 +10,6 @@ const addWorkout = payload => (
 );
 
 export {
-  loginUser,
+  changeUser,
   addWorkout
 };
