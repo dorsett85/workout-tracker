@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const { server: { port } } = require('../config.js');
 const dbConnect = require('./db/db');
@@ -16,6 +17,7 @@ dbConnect()
       req.db = db;
       next();
     });
+    app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use('/api', apiRouter);

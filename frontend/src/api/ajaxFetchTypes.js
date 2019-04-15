@@ -16,14 +16,16 @@ const getFetch = ajaxFetch;
  * @param {object} body Body property of the fetch api second parameter object
  * @see ajaxFetch
  */
-const postFetch = ({ url, options, body, success, error }) => {
+const postFetch = ({ url, options = {}, body, success, error }) => {
+  const { headers, ...moreOptions } = options;
   const postOptions = {
     method: 'POST',
     headers: {
+      ...headers,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
-    ...options
+    ...moreOptions
   };
   return ajaxFetch({
     url,

@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { server: { jwtSecretKey } } = require('../../config');
 
 
 router.post('/login', async (req, res) => {
@@ -17,6 +19,16 @@ router.post('/login', async (req, res) => {
 
   // Check if the password matches
   const passwordIsValid = await bcrypt.compare(password, user.password);
+  if (!passwordIsValid) {
+    return res.json({
+      username,
+      password: passwordIsValid
+    });
+  }
+
+  // Now that the user passed validation, add a jwt token cookie
+  const token = jwt.sign({ username, password }, jwtSecretKey);
+  res.cookie('jwtToken', token);
   return res.json({
     id: user._id,
     username,

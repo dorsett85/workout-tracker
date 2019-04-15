@@ -57,6 +57,8 @@ class Login extends React.Component {
           });
         } else if (!data.password) {
           this.setState({
+            usernameIsInvalid: false,
+            usernameError: '',
             passwordIsInvalid: true,
             passwordError: 'Password does not match the username'
           });
