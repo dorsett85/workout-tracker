@@ -1,8 +1,41 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 const { server: { jwtSecretKey } } = require('../../config');
 
+
+router.get('/login', async (req, res) => {
+  try {
+    const { db } = req;
+    const { jwtToken } = req.cookies;
+    const user = {
+      name: 'Guest'
+    };
+    if (!jwtToken) { return res.json(user); }
+
+    // Return request with guest as user if the token doesn't verify
+    let id;
+    try {
+      const { _id } = await jwt.verify(jwtToken, jwtSecretKey);
+      id = _id;
+    } catch (err) {
+      console.log(err);
+      return res.json(user);
+    }
+
+    // Token is verified, send back associated user info from the database
+    const users = db.collection('users');
+    const { _id, username } = await users.findOne({ _id: ObjectId(id) });
+    return res.send({
+      id: _id,
+      name: username
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500);
+  }
+});
 
 router.post('/login', async (req, res) => {
   const { db } = req;
@@ -27,10 +60,11 @@ router.post('/login', async (req, res) => {
   }
 
   // Now that the user passed validation, add a jwt token cookie
-  const token = jwt.sign({ username, password }, jwtSecretKey);
+  const { _id } = user;
+  const token = jwt.sign({ _id, username }, jwtSecretKey);
   res.cookie('jwtToken', token);
   return res.json({
-    id: user._id,
+    id: _id,
     username,
     password: passwordIsValid
   });

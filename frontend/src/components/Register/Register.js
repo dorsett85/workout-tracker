@@ -93,8 +93,9 @@ class Register extends React.Component {
         success: (data) => {
           this.props.changeUser({
             id: data.id,
-            username: data.username
+            name: data.username
           });
+          this.props.history.push(`/user/${data.id}`);
         },
         error: ({ status, message }) => {
           if (status === 409) {
@@ -157,5 +158,6 @@ class Register extends React.Component {
 export default connect(null, mapDispatchToProps)(Register);
 
 Register.propTypes = {
+  history: PropTypes.object.isRequired,
   changeUser: PropTypes.func.isRequired
 };

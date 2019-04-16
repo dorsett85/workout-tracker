@@ -65,8 +65,9 @@ class Login extends React.Component {
         } else {
           this.props.changeUser({
             id: data.id,
-            username: data.username
+            name: data.username
           });
+          this.props.history.push(`/user/${data.id}`);
         }
       },
       error: err => console.log(err)
@@ -121,5 +122,6 @@ class Login extends React.Component {
 export default connect(null, mapDispatchToProps)(Login);
 
 Login.propTypes = {
+  history: PropTypes.object.isRequired,
   changeUser: PropTypes.func.isRequired
 };
