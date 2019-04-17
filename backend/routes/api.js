@@ -10,7 +10,8 @@ router.get('/login', async (req, res) => {
     const { db } = req;
     const { jwtToken } = req.cookies;
     const user = {
-      name: 'Guest'
+      id: '',
+      username: 'Guest'
     };
     if (!jwtToken) { return res.json(user); }
 
@@ -29,11 +30,11 @@ router.get('/login', async (req, res) => {
     const { _id, username } = await users.findOne({ _id: ObjectId(id) });
     return res.send({
       id: _id,
-      name: username
+      username
     });
   } catch (err) {
     console.log(err);
-    return res.status(500);
+    return res.sendStatus(500);
   }
 });
 
@@ -90,10 +91,35 @@ router.post('/register', async (req, res) => {
     username,
     password: hashPassword
   });
+  const { insertedId } = newUser;
+
+  // Now that the user is in the database, add a jwt token cookie
+  const token = jwt.sign({ _id: insertedId, username }, jwtSecretKey);
+  res.cookie('jwtToken', token);
   return res.json({
-    id: newUser.insertedId,
+    id: insertedId,
     username
   });
+});
+
+router.post('/logout', async (req, res) => {
+  try {
+    const { id, username } = req.body;
+    /**
+     * TODO
+     * Tag user as logged out and add timestamp for last logged in
+     */
+
+    // Remove the jwtToken cookie and send back the guest user
+    res.clearCookie('jwtToken');
+    return res.json({
+      id: '',
+      username: 'Guest'
+    });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
 });
 
 module.exports = router;

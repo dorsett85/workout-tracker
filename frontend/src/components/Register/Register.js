@@ -9,12 +9,12 @@ import FormInput from '../UI/FormInput';
 
 
 const mapDispatchToProps = dispatch => (
-  { changeUser: user => dispatch(changeUser(user)) }
+  { loginUser: user => dispatch(changeUser(user)) }
 );
 
 class Register extends React.Component {
   static checkInputError(id, value) {
-    const lengthErr = value.length < 5 && 'Must be at least 4 character';
+    const lengthErr = value.length < 5 && 'Must be at least 5 character';
     const spaceErr = /[\s]/.test(value) && 'Cannot contain spaces';
     const specialCharErr = /[!@#$%^&*]/.test(value) ? false : 'Must contain a special character (!@#$%^&*)';
     const inputError = id === 'username'
@@ -37,8 +37,7 @@ class Register extends React.Component {
       passwordIsValid: null,
       passwordIsInvalid: null,
       passwordError: '',
-      validatingForm: false,
-      registering: false
+      validatingForm: false
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,7 +65,7 @@ class Register extends React.Component {
     let formIsValid = true;
 
     // Check validity of inputs and invalidate form if any aren't valid
-    const validateInputs = [username, password].reduce((acc, { id, value }) => {
+    const validatedInputs = [username, password].reduce((acc, { id, value }) => {
       const { isValid, inputError } = Register.checkInputError(id, value);
       if (formIsValid) { formIsValid = isValid; }
       return {
@@ -80,22 +79,24 @@ class Register extends React.Component {
     // Set form validity and start validing inputs on any change
     this.setState({
       validatingForm: true,
-      ...validateInputs
+      ...validatedInputs
     });
 
     if (formIsValid) {
+      const { username: newUsername, password: newPassword } = this.state;
       postFetch({
         url: '/api/register',
         body: {
-          username: this.state.username,
-          password: this.state.password
+          username: newUsername,
+          password: newPassword
         },
-        success: (data) => {
-          this.props.changeUser({
-            id: data.id,
-            name: data.username
+        success: ({ id, ...user }) => {
+          const { loginUser, history } = this.props;
+          loginUser({
+            id,
+            username: user.username
           });
-          this.props.history.push(`/user/${data.id}`);
+          history.push(`/user/${id}`);
         },
         error: ({ status, message }) => {
           if (status === 409) {
@@ -159,5 +160,5 @@ export default connect(null, mapDispatchToProps)(Register);
 
 Register.propTypes = {
   history: PropTypes.object.isRequired,
-  changeUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired
 };

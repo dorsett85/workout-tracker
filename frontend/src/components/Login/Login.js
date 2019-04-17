@@ -9,7 +9,7 @@ import FormInput from '../UI/FormInput';
 
 
 const mapDispatchToProps = dispatch => (
-  { changeUser: user => dispatch(changeUser(user)) }
+  { loginUser: user => dispatch(changeUser(user)) }
 );
 
 class Login extends React.Component {
@@ -23,8 +23,7 @@ class Login extends React.Component {
       password: '',
       passwordIsValid: null,
       passwordIsInvalid: null,
-      passwordError: '',
-      loggingIn: false
+      passwordError: ''
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,33 +40,31 @@ class Login extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { username, password } = this.state;
+    const { username: userNameInput, password: passwordInput } = this.state;
 
     postFetch({
       url: '/api/login',
       body: {
-        username,
-        password
+        username: userNameInput,
+        password: passwordInput
       },
-      success: (data) => {
-        if (!data.username) {
+      success: ({ id, username, password }) => {
+        if (!username) {
           this.setState({
             usernameIsInvalid: true,
             usernameError: 'Username is not registered'
           });
-        } else if (!data.password) {
+        } else if (!password) {
           this.setState({
-            usernameIsInvalid: false,
+            usernameIsValid: true,
             usernameError: '',
             passwordIsInvalid: true,
             passwordError: 'Password does not match the username'
           });
         } else {
-          this.props.changeUser({
-            id: data.id,
-            name: data.username
-          });
-          this.props.history.push(`/user/${data.id}`);
+          const { loginUser, history } = this.props;
+          loginUser({ id, username });
+          history.push(`/user/${id}`);
         }
       },
       error: err => console.log(err)
@@ -122,6 +119,6 @@ class Login extends React.Component {
 export default connect(null, mapDispatchToProps)(Login);
 
 Login.propTypes = {
-  history: PropTypes.object.isRequired,
-  changeUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };

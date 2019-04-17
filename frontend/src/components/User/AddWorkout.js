@@ -15,8 +15,13 @@ class AddWorkout extends React.Component {
     this.state = {
       title: ''
     };
+    this.workoutNameRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.workoutNameRef.current.focus();
   }
 
   handleChange(e) {
@@ -45,6 +50,7 @@ class AddWorkout extends React.Component {
                 onChange={handleChange}
                 value={title}
                 placeholder="Enter workout name"
+                ref={this.workoutNameRef}
               />
               <InputGroup.Append>
                 {title && (

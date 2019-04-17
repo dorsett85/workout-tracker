@@ -1,7 +1,0 @@
-const CHANGE_USER = 'CHANGE_USER';
-const ADD_WORKOUT = 'ADD_WORKOUT';
-
-export {
-  CHANGE_USER,
-  ADD_WORKOUT
-};

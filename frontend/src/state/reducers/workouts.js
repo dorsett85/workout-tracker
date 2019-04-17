@@ -1,4 +1,4 @@
-import { ADD_WORKOUT } from '../actions/action-types';
+import { ADD_WORKOUT } from '../actions';
 
 
 const workouts = (state = [], { type, payload }) => {
