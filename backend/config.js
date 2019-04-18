@@ -1,10 +1,9 @@
-const { DB_HOST, JWT_SECRET_KEY } = require('./.env.json');
-
-const env = process.env.NODE_ENV || 'development';
+const { ENV, JWT_SECRET_KEY } = require('../.env.json');
 
 
 // Define config for each environment
 const development = {
+  env: ENV,
   server: {
     port: 3000,
     jwtSecretKey: JWT_SECRET_KEY || 'privateKey'
@@ -26,4 +25,4 @@ const config = {
   production
 };
 
-module.exports = config[env];
+module.exports = config[ENV];

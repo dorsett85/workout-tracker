@@ -1,12 +1,6 @@
 {
+  "root": true,
   "extends": "airbnb",
-  "env": {
-    "browser": true
-  },
-  "parser": "babel-eslint",
-  "settings": {
-    "import/resolver": "webpack"
-  },
   "rules": {
     "react/jsx-filename-extension": 0,
     "linebreak-style": 0,
