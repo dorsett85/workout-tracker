@@ -26,11 +26,11 @@ class User extends React.Component {
 
   render() {
     const { addingWorkout } = this.state;
-    const { user } = this.props;
+    const { user: { username } } = this.props;
     const { handleToggleNewWorkout } = this;
     return (
       <>
-        <h2>Welcome {user.name}</h2>
+        <h2>Welcome {username}</h2>
         <div className="mt-3">
           {!addingWorkout
             ? <Button variant="success" onClick={handleToggleNewWorkout}>Add Workout</Button>

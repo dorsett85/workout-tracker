@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { server: { jwtSecretKey } } = require('../config');
 
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const { db } = req;
   const { username, password } = req.body;
   const users = db.collection('users');
@@ -26,7 +26,7 @@ const register = async (req, res) => {
   const { insertedId } = newUser;
 
   // Now that the user is in the database, add a jwt token cookie
-  const token = jwt.sign({ _id: insertedId, username }, jwtSecretKey);
+  const token = jwt.sign({ id: insertedId, username }, jwtSecretKey);
   res.cookie('jwtToken', token);
   return res.json({
     id: insertedId,

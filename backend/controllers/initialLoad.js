@@ -15,8 +15,7 @@ const initialLoad = async (req, res) => {
   // Return request with guest as user if the token doesn't verify
   let id;
   try {
-    const { _id } = await jwt.verify(jwtToken, jwtSecretKey);
-    id = _id;
+    ({ id } = await jwt.verify(jwtToken, jwtSecretKey));
   } catch (err) {
     console.log(err);
     return res.json(user);

@@ -49,14 +49,15 @@ class Login extends React.Component {
         password: passwordInput
       },
       success: ({ id, username, password }) => {
-        if (!username) {
+        if (username === false) {
           this.setState({
             usernameIsInvalid: true,
             usernameError: 'Username is not registered'
           });
-        } else if (!password) {
+        } else if (password === false) {
           this.setState({
             usernameIsValid: true,
+            usernameIsInvalid: false,
             usernameError: '',
             passwordIsInvalid: true,
             passwordError: 'Password does not match the username'

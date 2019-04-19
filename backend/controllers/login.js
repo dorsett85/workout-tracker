@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { server: { jwtSecretKey } } = require('../config');
 
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { db } = req;
   const { username, password } = req.body;
   const users = db.collection('users');
@@ -21,19 +21,15 @@ const login = async (req, res) => {
   if (!passwordIsValid) {
     return res.json({
       username,
-      password: passwordIsValid
+      password: false
     });
   }
 
-  // Now that the user passed validation, add a jwt token cookie
-  const { _id } = user;
-  const token = jwt.sign({ _id, username }, jwtSecretKey);
+  // Now that the user passed validation, add a jwt token cookie and a user on the req object
+  const { _id: id } = user;
+  const token = jwt.sign({ id, username }, jwtSecretKey);
   res.cookie('jwtToken', token);
-  return res.json({
-    id: _id,
-    username,
-    password: passwordIsValid
-  });
+  return res.json({ id, username });
 };
 
 module.exports = login;

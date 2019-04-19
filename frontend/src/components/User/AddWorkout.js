@@ -3,10 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { addWorkout } from 'state/actions/index';
+import { postFetch } from 'api/';
 
+
+const mapStateToProps = ({ user: { id } }) => (
+  { id }
+);
 
 const mapDispatchToProps = dispatch => (
-  { addWorkout: workout => dispatch(addWorkout(workout)) }
+  { createWorkout: workout => dispatch(addWorkout(workout)) }
 );
 
 class AddWorkout extends React.Component {
@@ -33,8 +38,25 @@ class AddWorkout extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const { title } = this.state;
-    this.props.addWorkout({ title, created: new Date() });
-    this.props.handleClose();
+    const { id, createWorkout, handleClose } = this.props;
+    const { createdDate } = new Date().toISOString();
+
+    // Add workout to database if a user is logged in
+    if (id) {
+      postFetch({
+        url: '/api/workout/create',
+        body: { title, createdDate },
+        success: (data) => {
+          console.log(data);
+          createWorkout({ title, created: new Date() });
+          handleClose();
+        },
+        error: err => console.log(err)
+      });
+    } else {
+      createWorkout({ title, created: new Date() });
+      handleClose();
+    }
   }
 
   render() {
@@ -77,9 +99,10 @@ class AddWorkout extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(AddWorkout);
+export default connect(mapStateToProps, mapDispatchToProps)(AddWorkout);
 
 AddWorkout.propTypes = {
+  id: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
-  addWorkout: PropTypes.func.isRequired
+  createWorkout: PropTypes.func.isRequired
 };
