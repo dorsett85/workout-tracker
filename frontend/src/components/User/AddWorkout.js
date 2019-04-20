@@ -6,19 +6,19 @@ import { addWorkout } from 'state/actions/index';
 import { postFetch } from 'api/';
 
 
-const mapStateToProps = ({ user: { id } }) => (
-  { id }
+const mapStateToProps = ({ user: { id: userId } }) => (
+  { userId }
 );
 
 const mapDispatchToProps = dispatch => (
-  { createWorkout: workout => dispatch(addWorkout(workout)) }
+  { addToWorkouts: workout => dispatch(addWorkout(workout)) }
 );
 
 class AddWorkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: ''
+      name: ''
     };
     this.workoutNameRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
@@ -31,36 +31,42 @@ class AddWorkout extends React.Component {
 
   handleChange(e) {
     this.setState({
-      title: e.target.value
+      name: e.target.value
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const { title } = this.state;
-    const { id, createWorkout, handleClose } = this.props;
-    const { createdDate } = new Date().toISOString();
+    const { name } = this.state;
+    const { userId, addToWorkouts, handleClose } = this.props;
 
     // Add workout to database if a user is logged in
-    if (id) {
+    if (userId) {
       postFetch({
         url: '/api/workout/create',
-        body: { title, createdDate },
-        success: (data) => {
-          console.log(data);
-          createWorkout({ title, created: new Date() });
+        body: { name },
+        success: (workout) => {
+          addToWorkouts({
+            id: workout.id,
+            name: workout.name,
+            createdDate: new Date(workout.createdDate)
+          });
           handleClose();
         },
         error: err => console.log(err)
       });
     } else {
-      createWorkout({ title, created: new Date() });
+      addToWorkouts({
+        id: Math.random(),
+        name,
+        createdDate: new Date()
+      });
       handleClose();
     }
   }
 
   render() {
-    const { title } = this.state;
+    const { name } = this.state;
     const { handleClose } = this.props;
     const { handleChange, handleSubmit } = this;
     return (
@@ -70,12 +76,12 @@ class AddWorkout extends React.Component {
             <InputGroup>
               <FormControl
                 onChange={handleChange}
-                value={title}
+                value={name}
                 placeholder="Enter workout name"
                 ref={this.workoutNameRef}
               />
               <InputGroup.Append>
-                {title && (
+                {name && (
                   <Button
                     type="submit"
                     variant="outline-success"
@@ -102,7 +108,7 @@ class AddWorkout extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(AddWorkout);
 
 AddWorkout.propTypes = {
-  id: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
-  createWorkout: PropTypes.func.isRequired
+  addToWorkouts: PropTypes.func.isRequired
 };

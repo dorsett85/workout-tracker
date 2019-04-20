@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { Col, Row, Card } from 'react-bootstrap';
 
 
-const mapStateToProps = state => (
-  { workouts: state.workouts }
+const mapStateToProps = ({ workouts }) => (
+  { workouts }
 );
 
 const WorkoutList = (props) => {
@@ -24,17 +24,17 @@ const WorkoutList = (props) => {
         )
         : (
           <Row>
-            {workouts.map(({ title, created, lastCompleted }) => (
-              <Col key={created} xs={12} md={4} className="mb-2">
+            {workouts.map(({ id, name, createdDate, lastCompleted }) => (
+              <Col key={id} xs={12} md={4} className="mb-2">
                 <Card border="dark">
-                  <Card.Header>{title}</Card.Header>
+                  <Card.Header>{name}</Card.Header>
                   <Card.Body>
                     <Row>
                       <Col xl={6}>
                         <p>
                           <b>Created</b>
                           <br />
-                          {created.toDateString()}
+                          {createdDate.toDateString()}
                         </p>
                       </Col>
                       <Col xl={6}>

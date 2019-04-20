@@ -29,10 +29,9 @@ class NavHeader extends React.Component {
   }
 
   handleLogout() {
-    const { id, username, changeToGuest } = this.props;
+    const { changeToGuest } = this.props;
     postFetch({
       url: '/api/logout',
-      body: { id, username },
       success: user => changeToGuest(user),
       error: err => console.error(err)
     });

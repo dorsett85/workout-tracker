@@ -1,5 +1,4 @@
 const logout = async (req, res) => {
-  const { id, username } = req.body;
   /**
    * TODO
    * Tag user as logged out and add timestamp for last logged in
