@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
-import { addWorkout } from 'state/actions/index';
+import { addWorkouts } from 'state/actions/index';
 import { postFetch } from 'api/';
 
 
@@ -11,7 +11,7 @@ const mapStateToProps = ({ user: { id: userId } }) => (
 );
 
 const mapDispatchToProps = dispatch => (
-  { addToWorkouts: workout => dispatch(addWorkout(workout)) }
+  { addToWorkouts: workout => dispatch(addWorkouts(workout)) }
 );
 
 class AddWorkout extends React.Component {
@@ -43,7 +43,7 @@ class AddWorkout extends React.Component {
     // Add workout to database if a user is logged in
     if (userId) {
       postFetch({
-        url: '/api/workout/create',
+        url: '/api/workout',
         body: { name },
         success: (workout) => {
           addToWorkouts({

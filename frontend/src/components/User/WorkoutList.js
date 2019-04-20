@@ -10,7 +10,6 @@ const mapStateToProps = ({ workouts }) => (
 
 const WorkoutList = (props) => {
   const { workouts } = props;
-
   return (
     <>
       <p>
@@ -25,9 +24,9 @@ const WorkoutList = (props) => {
         : (
           <Row>
             {workouts.map(({ id, name, createdDate, lastCompleted }) => (
-              <Col key={id} xs={12} md={4} className="mb-2">
+              <Col key={id} xs={12} md={4} className="mb-4">
                 <Card border="dark">
-                  <Card.Header>{name}</Card.Header>
+                  <Card.Header bg="primary">{name}</Card.Header>
                   <Card.Body>
                     <Row>
                       <Col xl={6}>
@@ -46,6 +45,7 @@ const WorkoutList = (props) => {
                       </Col>
                     </Row>
                   </Card.Body>
+                  <Card.Footer>This is a card footer</Card.Footer>
                 </Card>
               </Col>
             ))}

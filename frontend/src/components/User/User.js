@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
+import { addWorkouts } from 'state/actions';
+import { getFetch } from 'api/';
 import WorkoutList from './WorkoutList';
 import AddWorkout from './AddWorkout';
 
@@ -10,13 +12,40 @@ const mapStateToProps = ({ user }) => (
   { user }
 );
 
+const mapDispatchToProps = dispatch => (
+  { addToWorkouts: workouts => dispatch(addWorkouts(workouts)) }
+);
+
 class User extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      addingWorkout: false
+      addingWorkout: false,
+      fetchingUserWorkouts: true
     };
+    this.getWorkouts();
     this.handleToggleNewWorkout = this.handleToggleNewWorkout.bind(this);
+  }
+
+  getWorkouts() {
+    const { user: { id }, addToWorkouts } = this.props;
+    if (id) {
+      getFetch({
+        url: '/api/workout',
+        success: (workouts) => {
+          if (workouts.length) {
+            const workoutsWithDate = workouts.map(({ createdDate, ...workout }) => (
+              { ...workout, createdDate: new Date(createdDate) }
+            ));
+            addToWorkouts(workoutsWithDate);
+          }
+          this.setState({
+            fetchingUserWorkouts: false
+          });
+        },
+        error: err => console.log(err)
+      });
+    }
   }
 
   handleToggleNewWorkout() {
@@ -25,7 +54,7 @@ class User extends React.Component {
   }
 
   render() {
-    const { addingWorkout } = this.state;
+    const { addingWorkout, fetchingUserWorkouts } = this.state;
     const { user: { username } } = this.props;
     const { handleToggleNewWorkout } = this;
     return (
@@ -38,14 +67,15 @@ class User extends React.Component {
           }
         </div>
         <hr />
-        <WorkoutList />
+        {!fetchingUserWorkouts && <WorkoutList />}
       </>
     );
   }
 }
 
-export default connect(mapStateToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(User);
 
 User.propTypes = {
+  addToWorkouts: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };

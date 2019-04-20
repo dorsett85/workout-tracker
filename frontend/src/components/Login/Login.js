@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { changeUser } from 'state/actions/index';
+import { changeUser, resetWorkouts } from 'state/actions/index';
 import { postFetch } from 'api';
 import FormInput from '../UI/FormInput';
 
 
 const mapDispatchToProps = dispatch => (
-  { loginUser: user => dispatch(changeUser(user)) }
+  {
+    loginUser: user => dispatch(changeUser(user)),
+    removeExistingWorkouts: () => dispatch(resetWorkouts())
+  }
 );
 
 class Login extends React.Component {
@@ -63,7 +66,8 @@ class Login extends React.Component {
             passwordError: 'Password does not match the username'
           });
         } else {
-          const { loginUser, history } = this.props;
+          const { removeExistingWorkouts, loginUser, history } = this.props;
+          removeExistingWorkouts();
           loginUser({ id, username });
           history.push(`/user/${id}`);
         }
@@ -120,6 +124,7 @@ class Login extends React.Component {
 export default connect(null, mapDispatchToProps)(Login);
 
 Login.propTypes = {
+  removeExistingWorkouts: PropTypes.func.isRequired,
   loginUser: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired
 };
