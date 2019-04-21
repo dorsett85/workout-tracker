@@ -1,3 +1,14 @@
 .appContainer {
   margin-top: 25px;
 }
+
+// Keyframe animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 100; }    
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}

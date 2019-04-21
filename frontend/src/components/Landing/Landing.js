@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Jumbotron, Button } from 'react-bootstrap';
-
+import styles from 'assets/css/app.scss';
 
 const Landing = () => (
-  <Jumbotron className="w-100">
+  <Jumbotron className={`w-100 ${styles.fadeIn}`}>
     <h1>Welcome to the workout tracker</h1>
     <p>
       {'Create and track workouts with an effortless interface.'}

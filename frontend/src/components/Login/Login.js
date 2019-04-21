@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { changeUser, resetWorkouts } from 'state/actions/index';
 import { postFetch } from 'api';
+import styles from 'assets/css/app.scss';
 import FormInput from '../UI/FormInput';
 
 
@@ -82,7 +83,7 @@ class Login extends React.Component {
       password, passwordIsValid, passwordIsInvalid, passwordError
     } = this.state;
     return (
-      <Row>
+      <Row className={styles.fadeIn}>
         <Col xs={12} md={4}>
           <h2>Login</h2>
           <p>

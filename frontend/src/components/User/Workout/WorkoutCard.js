@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Card, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import styles from 'assets/css/app.scss';
 
 
 const WorkoutCard = (props) => {
@@ -33,7 +34,7 @@ const WorkoutCard = (props) => {
   );
 
   return (
-    <Card border="dark">
+    <Card border="dark" className={styles.fadeIn}>
       <Card.Header bg="primary"><b>{name}</b></Card.Header>
       <Card.Body>
         <Row>

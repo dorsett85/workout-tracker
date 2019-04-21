@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styles from 'assets/css/app.scss';
 import WorkoutContainer from './Workout/WorkoutContainer';
 
 
@@ -22,10 +23,10 @@ class User extends React.Component {
   render() {
     const { user: { username } } = this.props;
     return (
-      <>
+      <div className={styles.fadeIn}>
         <h2 className="mb-3">{`Welcome ${username}`}</h2>
         <WorkoutContainer />
-      </>
+      </div>
     );
   }
 }
