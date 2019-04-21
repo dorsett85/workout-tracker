@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Row, Col, InputGroup, FormControl, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { addWorkouts } from 'state/actions/index';
 import { postFetch } from 'api/';
 
@@ -18,20 +18,24 @@ class AddWorkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: ''
+      name: '',
+      invalidWorkoutName: null
     };
-    this.workoutNameRef = React.createRef();
+    this.workoutInputRef = React.createRef();
+    this.workoutOverlayRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.workoutNameRef.current.focus();
+    this.workoutInputRef.current.focus();
   }
 
   handleChange(e) {
+    this.workoutOverlayRef.current.hide();
     this.setState({
-      name: e.target.value
+      name: e.target.value,
+      invalidWorkoutName: null
     });
   }
 
@@ -39,6 +43,7 @@ class AddWorkout extends React.Component {
     e.preventDefault();
     const { name } = this.state;
     const { userId, addToWorkouts, handleClose } = this.props;
+    this.workoutOverlayRef.current.hide();
 
     // Add workout to database if a user is logged in
     if (userId) {
@@ -46,12 +51,19 @@ class AddWorkout extends React.Component {
         url: '/api/workout',
         body: { name },
         success: (workout) => {
-          addToWorkouts({
-            id: workout.id,
-            name: workout.name,
-            createdDate: new Date(workout.createdDate)
-          });
-          handleClose();
+          if (workout.id) {
+            addToWorkouts({
+              id: workout.id,
+              name: workout.name,
+              createdDate: new Date(workout.createdDate)
+            });
+            handleClose();
+          } else {
+            this.workoutOverlayRef.current.show();
+            this.setState({
+              invalidWorkoutName: true
+            });
+          }
         }
       });
     } else {
@@ -65,20 +77,32 @@ class AddWorkout extends React.Component {
   }
 
   render() {
-    const { name } = this.state;
+    const { name, invalidWorkoutName } = this.state;
     const { handleClose } = this.props;
-    const { handleChange, handleSubmit } = this;
+    const { workoutInputRef, workoutOverlayRef, handleChange, handleSubmit } = this;
     return (
       <Row>
         <Col xs={12} md={4}>
           <form onSubmit={handleSubmit}>
             <InputGroup>
-              <FormControl
-                onChange={handleChange}
-                value={name}
-                placeholder="Enter workout name"
-                ref={this.workoutNameRef}
-              />
+              <OverlayTrigger
+                ref={workoutOverlayRef}
+                trigger={null}
+                overlay={(
+                  <Tooltip>
+                    {'Workout already exists'}
+                  </Tooltip>
+                )}
+                placement="bottom"
+              >
+                <FormControl
+                  onChange={handleChange}
+                  isInvalid={invalidWorkoutName}
+                  value={name}
+                  placeholder="Enter workout name"
+                  ref={workoutInputRef}
+                />
+              </OverlayTrigger>
               <InputGroup.Append>
                 {name && (
                   <Button

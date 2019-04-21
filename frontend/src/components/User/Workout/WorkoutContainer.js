@@ -88,17 +88,21 @@ class WorkoutContainer extends React.Component {
 
   handleDeleteClick(e) {
     const { value } = e.target;
-    const { removeFromWorkouts } = this.props;
-    deleteFetch({
-      url: '/api/workout',
-      body: {
-        id: value
-      },
-      success: ({ id }) => {
-        console.log(id);
-        removeFromWorkouts(id);
-      }
-    });
+    const { id, removeFromWorkouts } = this.props;
+    
+    if (id) {
+      deleteFetch({
+        url: '/api/workout',
+        body: {
+          id: value
+        },
+        success: (workout) => {
+          removeFromWorkouts(workout.id);
+        }
+      });
+    } else {
+      removeFromWorkouts(value);
+    }
   }
 
   render() {
