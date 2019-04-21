@@ -15,6 +15,10 @@ const development = {
 
 const production = {
   ...development,
+  server: {
+    port: 3001,
+    jwtSecretKey: JWT_SECRET_KEY || 'privateKey'
+  },
   db: {
     connectionString: 'mongodb://localhost:27017/workout-tracker'
   }
