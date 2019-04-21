@@ -20,7 +20,7 @@
  *   error: err => console.log(err)
  * });
  */
-const ajaxFetch = ({ url, options, success, error }) => (
+const ajaxFetch = ({ url, options, success, error = console.log }) => (
   fetch(url, options)
     .then((res) => {
       if (!res.ok) { throw res; }

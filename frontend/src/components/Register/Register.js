@@ -109,6 +109,8 @@ class Register extends React.Component {
               usernameIsInvalid: true,
               usernameError: message
             });
+          } else {
+            console.log({ status, message });
           }
         }
       });

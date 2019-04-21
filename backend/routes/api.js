@@ -7,6 +7,7 @@ const register = require('../controllers/register');
 const logout = require('../controllers/logout');
 const getWorkout = require('../controllers/workouts/getWorkout');
 const createWorkout = require('../controllers/workouts/createWorkout');
+const deleteWorkout = require('../controllers/workouts/deleteWorkout');
 
 
 // Initial get request run on page load/refresh
@@ -23,6 +24,6 @@ router.get('/workout', asyncErrorHandler(getWorkout));
 router.get('/workout/:id', asyncErrorHandler(getWorkout));
 router.post('/workout', asyncErrorHandler(createWorkout));
 router.put('/workout');
-router.delete('/workout');
+router.delete('/workout', asyncErrorHandler(deleteWorkout));
 
 module.exports = router;

@@ -52,12 +52,11 @@ class AddWorkout extends React.Component {
             createdDate: new Date(workout.createdDate)
           });
           handleClose();
-        },
-        error: err => console.log(err)
+        }
       });
     } else {
       addToWorkouts({
-        id: Math.random(),
+        id: Math.random().toString(),
         name,
         createdDate: new Date()
       });

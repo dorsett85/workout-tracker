@@ -71,8 +71,7 @@ class Login extends React.Component {
           loginUser({ id, username });
           history.push(`/user/${id}`);
         }
-      },
-      error: err => console.log(err)
+      }
     });
   }
 

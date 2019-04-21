@@ -32,7 +32,7 @@ class AppLoad extends React.Component {
         this.props.appIsLoaded(true);
       },
       error: (err) => {
-        console.error(err);
+        console.log(err);
         this.props.appIsLoaded(true);
       }
     });

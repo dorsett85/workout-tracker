@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { server: { jwtSecretKey } } = require('../config');
 
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   const { db } = req;
   const { username, password } = req.body;
   const users = db.collection('users');

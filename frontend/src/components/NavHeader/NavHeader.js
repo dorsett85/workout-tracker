@@ -38,8 +38,7 @@ class NavHeader extends React.Component {
       success: (user) => {
         removeExistingWorkouts();
         changeToGuest(user);
-      },
-      error: err => console.error(err)
+      }
     });
   }
 
