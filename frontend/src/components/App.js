@@ -1,13 +1,18 @@
 import { hot } from 'react-hot-loader/root';
-import React, { memo } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from '../state/store';
 import AppLoad from './UI/AppLoad';
 import Layout from './UI/Layout';
+import 'assets/css/vendor.css';
 
 
 const App = () => (
-  <AppLoad>
-    <Layout />
-  </AppLoad>
+  <Provider store={store}>
+    <AppLoad>
+      <Layout />
+    </AppLoad>
+  </Provider>
 );
 
-export default hot((memo(App)));
+export default hot(App);

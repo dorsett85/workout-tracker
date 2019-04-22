@@ -13,8 +13,8 @@ const mapStatetoProps = ({ app: { appLoaded } }) => (
 
 const mapDispatchToProps = dispatch => (
   {
-    appIsLoaded: loaded => dispatch(appIsLoaded(loaded)),
-    changeUser: user => dispatch(changeUser(user))
+    appLoaded: loaded => dispatch(appIsLoaded(loaded)),
+    checkInUser: user => dispatch(changeUser(user))
   }
 );
 
@@ -25,15 +25,16 @@ class AppLoad extends React.Component {
   }
 
   getUser() {
+    const { appLoaded, checkInUser } = this.props;
     getFetch({
       url: '/api/initialLoad',
       success: (user) => {
-        this.props.changeUser(user);
-        this.props.appIsLoaded(true);
+        checkInUser(user);
+        appLoaded(true);
       },
       error: (err) => {
         console.log(err);
-        this.props.appIsLoaded(true);
+        appLoaded(true);
       }
     });
   }
@@ -55,8 +56,7 @@ class AppLoad extends React.Component {
 export default connect(mapStatetoProps, mapDispatchToProps)(AppLoad);
 
 AppLoad.propTypes = {
-  appIsLoaded: PropTypes.func.isRequired,
   appLoaded: PropTypes.bool.isRequired,
-  changeUser: PropTypes.func.isRequired,
-  children: PropTypes.object.isRequired
+  checkInUser: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired
 };
