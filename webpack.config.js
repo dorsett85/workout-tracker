@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // Function to get plugins (some conditionally for production)
 const getPlugins = (devMode) => {
-  const hashType = devMode ? 'hash' : 'contenthash';
+  const hash = devMode ? '' : '-[contenthash:8]';
   const plugins = [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'frontend/src/index.html'),
@@ -14,8 +14,8 @@ const getPlugins = (devMode) => {
       title: 'Workout Tracker'
     }),
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : `[name].[${hashType}].css`,
-      chunkFilename: devMode ? '[name].css' : `[name].[${hashType}].css`,
+      filename: `[name]${hash}.css`,
+      chunkFilename: `[name]${hash}.css`,
     }),
     new webpack.HashedModuleIdsPlugin()
   ];
@@ -25,11 +25,11 @@ const getPlugins = (devMode) => {
 
 module.exports = (env, options) => {
   const devMode = options.mode === 'development';
-  const hashType = devMode ? 'hash' : 'contenthash';
+  const hash = devMode ? '' : '-[contenthash:8]';
   return {
     entry: path.resolve(__dirname, 'frontend/src/index.js'),
     output: {
-      filename: `[name].[${hashType}].js`,
+      filename: `[name]${hash}.js`,
       publicPath: '/static/'
     },
     optimization: {
@@ -75,7 +75,7 @@ module.exports = (env, options) => {
               loader: 'css-loader',
               options: {
                 modules: true,
-                localIdentName: `[name]-[${hashType}]`,
+                localIdentName: `[name]${hash}`,
               }
             },
             'sass-loader'

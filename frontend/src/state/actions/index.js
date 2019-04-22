@@ -6,7 +6,7 @@ export const REMOVE_WORKOUTS = 'REMOVE_WORKOUTS';
 export const RESET_WORKOUTS = 'RESET_WORKOUTS';
 
 
-const appIsLoaded = payload => (
+const setAppLoaded = payload => (
   { type: APP_LOADED, payload }
 );
 
@@ -30,7 +30,7 @@ const resetWorkouts = payload => (
 );
 
 export {
-  appIsLoaded,
+  setAppLoaded,
   changeUser,
   loadingUser,
   addWorkouts,

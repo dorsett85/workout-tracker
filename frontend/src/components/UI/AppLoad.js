@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { appIsLoaded, changeUser } from 'state/actions';
-import { Spinner } from 'react-bootstrap';
+import { setAppLoaded, changeUser } from 'state/actions';
 import { getFetch } from 'api';
-import styles from './ui.scss';
+import LoadingSpinner from './LoadingSpinner';
 
 
 const mapStatetoProps = ({ app: { appLoaded } }) => (
@@ -13,7 +12,7 @@ const mapStatetoProps = ({ app: { appLoaded } }) => (
 
 const mapDispatchToProps = dispatch => (
   {
-    appLoaded: loaded => dispatch(appIsLoaded(loaded)),
+    setAppIsLoaded: loaded => dispatch(setAppLoaded(loaded)),
     checkInUser: user => dispatch(changeUser(user))
   }
 );
@@ -25,16 +24,16 @@ class AppLoad extends React.Component {
   }
 
   getUser() {
-    const { appLoaded, checkInUser } = this.props;
+    const { setAppIsLoaded, checkInUser } = this.props;
     getFetch({
       url: '/api/initialLoad',
       success: (user) => {
         checkInUser(user);
-        appLoaded(true);
+        setAppIsLoaded(true);
       },
       error: (err) => {
         console.log(err);
-        appLoaded(true);
+        setAppIsLoaded(true);
       }
     });
   }
@@ -44,11 +43,7 @@ class AppLoad extends React.Component {
     return (
       appLoaded
         ? children
-        : (
-          <div className={`d-flex justify-content-center mt-3 ${styles.delayShow}`}>
-            <Spinner animation="border" />
-          </div>
-        )
+        : <LoadingSpinner className="mt-3" />
     );
   }
 }
@@ -57,6 +52,7 @@ export default connect(mapStatetoProps, mapDispatchToProps)(AppLoad);
 
 AppLoad.propTypes = {
   appLoaded: PropTypes.bool.isRequired,
+  setAppIsLoaded: PropTypes.func.isRequired,
   checkInUser: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired
 };
