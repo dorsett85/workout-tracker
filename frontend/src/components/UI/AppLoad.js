@@ -44,7 +44,7 @@ class AppLoad extends React.Component {
       appLoaded
         ? children
         : (
-          <div className={`d-flex justify-content-center mt-3 delayShow ${styles.delayShow}`}>
+          <div className={`d-flex justify-content-center mt-3 ${styles.delayShow}`}>
             <Spinner animation="border" />
           </div>
         )
