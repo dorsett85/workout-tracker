@@ -27,7 +27,8 @@ class NavHeader extends React.Component {
   }
 
   handleLinkClick(path) {
-    const { history } = this.props;
+    const { history, location: { pathname } } = this.props;
+    if (!['/', '/login', '/register', '/guest'].includes(pathname) && path === '/') { return; }
     history.push(path);
   }
 
@@ -86,5 +87,6 @@ NavHeader.propTypes = {
   username: PropTypes.string.isRequired,
   removeExistingWorkouts: PropTypes.func.isRequired,
   changeToGuest: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
