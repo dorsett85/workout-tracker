@@ -83,10 +83,14 @@ class NavHeader extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(NavHeader);
 
 NavHeader.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number,
   username: PropTypes.string.isRequired,
   removeExistingWorkouts: PropTypes.func.isRequired,
   changeToGuest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
+};
+
+NavHeader.defaultProps = {
+  id: undefined
 };

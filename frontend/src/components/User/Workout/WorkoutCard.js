@@ -5,7 +5,7 @@ import styles from 'assets/css/app.scss';
 
 
 const WorkoutCard = (props) => {
-  const { id, name, createdDate, lastCompleted, handleEditClick, handleDeleteClick } = props;
+  const { id, name, created, lastCompleted, handleEditClick, handleDeleteClick } = props;
   
   // Set up a ref for the delete confirmation overlay
   const deleteRef = React.createRef();
@@ -42,7 +42,7 @@ const WorkoutCard = (props) => {
             <div>
               <b>Created</b>
               <br />
-              {createdDate.toDateString()}
+              {created.toDateString()}
             </div>
           </Col>
           <Col xl={6}>
@@ -83,14 +83,15 @@ const WorkoutCard = (props) => {
 export default memo(WorkoutCard);
 
 WorkoutCard.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number,
   name: PropTypes.string.isRequired,
-  createdDate: PropTypes.instanceOf(Date).isRequired,
+  created: PropTypes.instanceOf(Date).isRequired,
   lastCompleted: PropTypes.instanceOf(Date),
   handleEditClick: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired
 };
 
 WorkoutCard.defaultProps = {
+  id: undefined,
   lastCompleted: undefined
 };

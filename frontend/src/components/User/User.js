@@ -35,7 +35,7 @@ export default connect(mapStateToProps)(User);
 
 User.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     username: PropTypes.string
   }).isRequired
 };

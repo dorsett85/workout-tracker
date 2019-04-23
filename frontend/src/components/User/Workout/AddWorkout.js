@@ -50,13 +50,9 @@ class AddWorkout extends React.Component {
       postFetch({
         url: '/api/workout',
         body: { name },
-        success: (workout) => {
+        success: ({ created, ...workout }) => {
           if (workout.id) {
-            addToWorkouts({
-              id: workout.id,
-              name: workout.name,
-              createdDate: new Date(workout.createdDate)
-            });
+            addToWorkouts({ ...workout, created: new Date(created) });
             handleClose();
           } else {
             this.workoutOverlayRef.current.show();
@@ -68,9 +64,9 @@ class AddWorkout extends React.Component {
       });
     } else {
       addToWorkouts({
-        id: Math.random().toString(),
+        id: Math.random(),
         name,
-        createdDate: new Date()
+        created: new Date()
       });
       handleClose();
     }
@@ -131,7 +127,11 @@ class AddWorkout extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(AddWorkout);
 
 AddWorkout.propTypes = {
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.number,
   handleClose: PropTypes.func.isRequired,
   addToWorkouts: PropTypes.func.isRequired
+};
+
+AddWorkout.defaultProps = {
+  userId: undefined
 };

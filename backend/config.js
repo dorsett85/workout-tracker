@@ -1,7 +1,8 @@
-const { ENV, JWT_SECRET_KEY } = require('../.env.json');
+const { ENV, DB_CONNECTION, JWT_SECRET_KEY } = require('../.env.json');
 
 
 // Define config for each environment
+process.env.NODE_ENV = ENV;
 const development = {
   env: ENV,
   server: {
@@ -9,7 +10,15 @@ const development = {
     jwtSecretKey: JWT_SECRET_KEY || 'privateKey'
   },
   db: {
-    connectionString: 'mongodb://localhost:27017/workout-tracker'
+    client: 'pg',
+    connection: DB_CONNECTION,
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
   }
 };
 
@@ -20,7 +29,15 @@ const production = {
     jwtSecretKey: JWT_SECRET_KEY || 'privateKey'
   },
   db: {
-    connectionString: 'mongodb://localhost:27017/workout-tracker'
+    client: 'pg',
+    connection: DB_CONNECTION,
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
   }
 };
 

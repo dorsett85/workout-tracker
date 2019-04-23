@@ -2,7 +2,6 @@ import { CHANGE_USER, LOADING_USER } from '../actions';
 
 
 const initialState = {
-  id: '',
   username: 'Guest'
 };
 

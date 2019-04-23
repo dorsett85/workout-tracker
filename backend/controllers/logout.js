@@ -6,10 +6,7 @@ const logout = async (req, res) => {
 
   // Remove the jwtToken cookie and send back the guest user
   res.clearCookie('jwtToken');
-  return res.json({
-    id: '',
-    username: 'Guest'
-  });
+  return res.json({ username: 'Guest' });
 };
 
 module.exports = logout;

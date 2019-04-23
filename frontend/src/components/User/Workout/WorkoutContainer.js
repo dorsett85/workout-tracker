@@ -41,8 +41,8 @@ class WorkoutContainer extends React.Component {
         url: '/api/workout',
         success: (workouts) => {
           if (workouts.length) {
-            const workoutsWithDate = workouts.map(({ createdDate, ...workout }) => (
-              { ...workout, createdDate: new Date(createdDate) }
+            const workoutsWithDate = workouts.map(({ created, ...workout }) => (
+              { ...workout, created: new Date(created) }
             ));
             addToWorkouts(workoutsWithDate);
           }
@@ -87,21 +87,21 @@ class WorkoutContainer extends React.Component {
   }
 
   handleDeleteClick(e) {
-    const { value } = e.target;
+    const workoutId = +e.target.value;
     const { id, removeFromWorkouts } = this.props;
-    
+
     if (id) {
       deleteFetch({
         url: '/api/workout',
         body: {
-          id: value
+          id: workoutId
         },
         success: (workout) => {
           removeFromWorkouts(workout.id);
         }
       });
     } else {
-      removeFromWorkouts(value);
+      removeFromWorkouts(workoutId);
     }
   }
 
@@ -118,13 +118,17 @@ class WorkoutContainer extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkoutContainer));
 
 WorkoutContainer.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number,
   workouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
-    createdDate: PropTypes.instanceOf(Date),
+    created: PropTypes.instanceOf(Date),
     lastCompleted: PropTypes.instanceOf(Date)
   })).isRequired,
   addToWorkouts: PropTypes.func.isRequired,
   removeFromWorkouts: PropTypes.func.isRequired
+};
+
+WorkoutContainer.defaultProps = {
+  id: undefined
 };

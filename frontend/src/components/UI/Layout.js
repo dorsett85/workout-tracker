@@ -60,5 +60,9 @@ const Layout = ({ id }) => (
 export default connect(mapStateToProps)(memo(Layout));
 
 Layout.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.number
+};
+
+Layout.defaultProps = {
+  id: undefined
 };

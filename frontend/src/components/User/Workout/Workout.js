@@ -33,14 +33,10 @@ const Workout = (props) => {
           )
           : (
             <Row>
-              {workouts.map(({ id, name, createdDate, lastCompleted }) => (
-                <Col key={id} xs={12} md={4} className="mb-4">
+              {workouts.map(workout => (
+                <Col key={workout.id} xs={12} md={4} className="mb-4">
                   <WorkoutCard
-                    key={id}
-                    id={id}
-                    name={name}
-                    createdDate={createdDate}
-                    lastCompleted={lastCompleted}
+                    {...workout}
                     handleEditClick={handleEditClick}
                     handleDeleteClick={handleDeleteClick}
                   />
@@ -57,9 +53,9 @@ export default Workout;
 
 Workout.propTypes = {
   workouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
-    createdDate: PropTypes.instanceOf(Date),
+    created: PropTypes.instanceOf(Date),
     lastCompleted: PropTypes.instanceOf(Date)
   })).isRequired
 };
