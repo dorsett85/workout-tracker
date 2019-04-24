@@ -7,9 +7,7 @@ import styles from 'assets/css/app.scss';
 import NavHeader from '../NavHeader/NavHeader';
 import ConditionalRoute from './ConditionalRoute';
 import Landing from '../Landing/Landing';
-import Login from '../Login/Login';
-import Register from '../Register/Register';
-import User from '../User/User';
+import lazyLoad from './lazyLoad';
 
 
 const mapStateToProps = ({ user: { id } }) => (
@@ -33,24 +31,27 @@ const Layout = ({ id }) => (
               />
               <ConditionalRoute
                 path="/login"
-                component={Login}
+                component={lazyLoad(() => import('../Login/Login'))}
                 condition={!id}
                 redirect={`/user/${id}`}
               />
               <ConditionalRoute
                 path="/register"
-                component={Register}
+                component={lazyLoad(() => import('../Register/Register'))}
                 condition={!id}
                 redirect={`/user/${id}`}
               />
               <ConditionalRoute
                 exact
                 path={`/user/${id}`}
-                component={User}
+                component={lazyLoad(() => import('../User/User'))}
                 condition={id}
                 redirect="/login"
               />
-              <Route path="/guest" component={User} />
+              <Route
+                path="/guest"
+                component={lazyLoad(() => import('../User/User'))}
+              />
               <Redirect to={`/user/${id}`} />
             </Switch>
           </Col>

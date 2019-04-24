@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'react-bootstrap';
-import AddWorkout from './AddWorkout';
+import WorkoutCreate from './WorkoutCreate';
 import WorkoutCard from './WorkoutCard';
 
 
@@ -16,7 +16,7 @@ const Workout = (props) => {
         <Col>
           {!addingWorkout
             ? <Button variant="success" onClick={handleToggleNewWorkout}>Add Workout</Button>
-            : <AddWorkout handleClose={handleToggleNewWorkout} />
+            : <WorkoutCreate handleClose={handleToggleNewWorkout} />
           }
         </Col>
       </Row>

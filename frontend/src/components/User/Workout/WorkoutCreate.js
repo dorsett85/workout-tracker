@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => (
   { addToWorkouts: workout => dispatch(addWorkouts(workout)) }
 );
 
-class AddWorkout extends React.Component {
+class WorkoutCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -124,14 +124,14 @@ class AddWorkout extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddWorkout);
+export default connect(mapStateToProps, mapDispatchToProps)(WorkoutCreate);
 
-AddWorkout.propTypes = {
+WorkoutCreate.propTypes = {
   userId: PropTypes.number,
   handleClose: PropTypes.func.isRequired,
   addToWorkouts: PropTypes.func.isRequired
 };
 
-AddWorkout.defaultProps = {
+WorkoutCreate.defaultProps = {
   userId: undefined
 };
