@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import styles from 'assets/css/app.scss';
 import NavHeader from '../NavHeader/NavHeader';
@@ -23,33 +23,36 @@ const Layout = ({ id }) => (
       <Container className={styles.appContainer}>
         <Row>
           <Col>
-            <ConditionalRoute
-              exact
-              path="/"
-              component={Landing}
-              condition={!id}
-              redirect={`/user/${id}`}
-            />
-            <ConditionalRoute
-              path="/login"
-              component={Login}
-              condition={!id}
-              redirect={`/user/${id}`}
-            />
-            <ConditionalRoute
-              path="/register"
-              component={Register}
-              condition={!id}
-              redirect={`/user/${id}`}
-            />
-            <ConditionalRoute
-              exact
-              path="/user/:id"
-              component={User}
-              condition={id}
-              redirect="/login"
-            />
-            <Route path="/guest" component={User} />
+            <Switch>
+              <ConditionalRoute
+                exact
+                path="/"
+                component={Landing}
+                condition={!id}
+                redirect={`/user/${id}`}
+              />
+              <ConditionalRoute
+                path="/login"
+                component={Login}
+                condition={!id}
+                redirect={`/user/${id}`}
+              />
+              <ConditionalRoute
+                path="/register"
+                component={Register}
+                condition={!id}
+                redirect={`/user/${id}`}
+              />
+              <ConditionalRoute
+                exact
+                path={`/user/${id}`}
+                component={User}
+                condition={id}
+                redirect="/login"
+              />
+              <Route path="/guest" component={User} />
+              <Redirect to={`/user/${id}`} />
+            </Switch>
           </Col>
         </Row>
       </Container>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import styles from 'assets/css/app.scss';
 import WorkoutContainer from './Workout/WorkoutContainer';
 
@@ -13,6 +14,7 @@ const mapStateToProps = ({ user }) => (
 class User extends React.Component {
   constructor(props) {
     super(props);
+
     /**
      * TODO 4/20/19
      * Add additional user functionality other than workouts
