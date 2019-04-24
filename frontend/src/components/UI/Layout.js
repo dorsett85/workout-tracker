@@ -31,26 +31,26 @@ const Layout = ({ id }) => (
               />
               <ConditionalRoute
                 path="/login"
-                component={lazyLoad(() => import('../Login/Login'))}
+                component={lazyLoad(import('../Login/Login'))}
                 condition={!id}
                 redirect={`/user/${id}`}
               />
               <ConditionalRoute
                 path="/register"
-                component={lazyLoad(() => import('../Register/Register'))}
+                component={lazyLoad(import('../Register/Register'))}
                 condition={!id}
                 redirect={`/user/${id}`}
               />
               <ConditionalRoute
                 exact
                 path={`/user/${id}`}
-                component={lazyLoad(() => import('../User/User'))}
+                component={lazyLoad(import('../User/User'))}
                 condition={id}
                 redirect="/login"
               />
               <Route
                 path="/guest"
-                component={lazyLoad(() => import('../User/User'))}
+                component={lazyLoad(import('../User/User'))}
               />
               <Redirect to={`/user/${id}`} />
             </Switch>
