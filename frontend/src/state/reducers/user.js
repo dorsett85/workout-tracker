@@ -2,7 +2,8 @@ import { CHANGE_USER, LOADING_USER } from '../actions';
 
 
 const initialState = {
-  username: 'Guest'
+  username: 'Guest',
+  loadingUser: undefined
 };
 
 const user = (state = initialState, { type, payload }) => {

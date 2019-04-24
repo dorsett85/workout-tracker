@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { changeUser, resetWorkouts } from 'state/actions';
+import { changeUser, removeWorkouts } from 'state/actions';
 import { postFetch } from 'api';
 import styles from 'assets/css/app.scss';
 import FormInput from '../UI/FormInput';
@@ -12,7 +12,7 @@ import FormInput from '../UI/FormInput';
 const mapDispatchToProps = dispatch => (
   {
     loginUser: user => dispatch(changeUser(user)),
-    removeExistingWorkouts: () => dispatch(resetWorkouts())
+    resetWorkouts: () => dispatch(removeWorkouts())
   }
 );
 
@@ -95,8 +95,8 @@ class Register extends React.Component {
           password: newPassword
         },
         success: ({ id, ...user }) => {
-          const { removeExistingWorkouts, loginUser, history } = this.props;
-          removeExistingWorkouts();
+          const { resetWorkouts, loginUser, history } = this.props;
+          resetWorkouts();
           loginUser({
             id,
             username: user.username
@@ -166,7 +166,7 @@ class Register extends React.Component {
 export default connect(null, mapDispatchToProps)(Register);
 
 Register.propTypes = {
-  removeExistingWorkouts: PropTypes.func.isRequired,
+  resetWorkouts: PropTypes.func.isRequired,
   loginUser: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired
 };

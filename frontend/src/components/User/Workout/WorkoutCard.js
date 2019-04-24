@@ -1,37 +1,52 @@
 import React, { memo } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Col, Row, Card, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { editWorkout, removeWorkouts } from 'state/actions';
+import { deleteFetch } from 'api';
 import styles from 'assets/css/app.scss';
 
 
+const mapStateToProps = ({ user: { id: userId }, workouts: { workouts } }, { id }) => {
+  const thisWorkout = workouts.find(workout => workout.id === id);
+  return { userId, ...thisWorkout };
+};
+
+const mapDispatchToProps = dispatch => (
+  {
+    setEditWorkout: id => dispatch(editWorkout(id)),
+    removeFromWorkouts: workouts => dispatch(removeWorkouts(workouts))
+  }
+);
+
 const WorkoutCard = (props) => {
-  const { id, name, created, lastCompleted, handleEditClick, handleDeleteClick } = props;
-  
+  const { userId, id, name, created, lastCompleted, setEditWorkout, removeFromWorkouts } = props;
+
   // Set up a ref for the delete confirmation overlay
   const deleteRef = React.createRef();
   const handleHideDelete = () => (
     deleteRef.current.hide()
   );
 
-  const handleConfirmDelete = (e) => {
-    deleteRef.current.hide();
-    handleDeleteClick(e);
+  const handleEditClick = () => {
+    setEditWorkout(id);
   };
 
-  const deletePopover = (
-    <Popover title="Are you sure?">
-      <ButtonGroup>
-        <Button onClick={handleHideDelete}>Cancel</Button>
-        <Button
-          variant="danger"
-          onClick={handleConfirmDelete}
-          value={id}
-        >
-          {'DELETE'}
-        </Button>
-      </ButtonGroup>
-    </Popover>
-  );
+  const handleConfirmDelete = () => {
+    deleteRef.current.hide();
+
+    if (userId) {
+      deleteFetch({
+        url: '/api/workout',
+        body: { id },
+        success: (workout) => {
+          removeFromWorkouts(workout.id);
+        }
+      });
+    } else {
+      removeFromWorkouts(id);
+    }
+  };
 
   return (
     <Card border="dark" className={styles.fadeIn}>
@@ -60,14 +75,25 @@ const WorkoutCard = (props) => {
             <Button
               variant="outline-primary"
               onClick={handleEditClick}
-              value={id}
             >
               {'Edit'}
             </Button>
             <OverlayTrigger
               ref={deleteRef}
               trigger="click"
-              overlay={deletePopover}
+              overlay={(
+                <Popover title="Are you sure?">
+                  <ButtonGroup>
+                    <Button onClick={handleHideDelete}>Cancel</Button>
+                    <Button
+                      variant="danger"
+                      onClick={handleConfirmDelete}
+                    >
+                      {'DELETE'}
+                    </Button>
+                  </ButtonGroup>
+                </Popover>
+              )}
             >
               <Button variant="outline-danger">
                 {'Delete'}
@@ -80,18 +106,19 @@ const WorkoutCard = (props) => {
   );
 };
 
-export default memo(WorkoutCard);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(WorkoutCard));
 
 WorkoutCard.propTypes = {
-  id: PropTypes.number,
+  userId: PropTypes.number,
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   created: PropTypes.instanceOf(Date).isRequired,
   lastCompleted: PropTypes.instanceOf(Date),
-  handleEditClick: PropTypes.func.isRequired,
-  handleDeleteClick: PropTypes.func.isRequired
+  setEditWorkout: PropTypes.func.isRequired,
+  removeFromWorkouts: PropTypes.func.isRequired
 };
 
 WorkoutCard.defaultProps = {
-  id: undefined,
+  userId: undefined,
   lastCompleted: undefined
 };

@@ -5,7 +5,7 @@ const deleteWorkout = async (req, res) => {
   const { body: { id } } = req;
 
   // Delete the requested document and send back the id
-  await knex.raw('delete from workouts where user_id = ?', id);
+  await knex.raw('delete from workouts where id = ?', id);
   return res.json({ id });
 };
 

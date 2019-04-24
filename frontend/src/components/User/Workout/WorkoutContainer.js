@@ -2,19 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { addWorkouts, removeWorkouts } from 'state/actions';
-import { getFetch, deleteFetch } from 'api/';
+import { addWorkouts } from 'state/actions';
+import { getFetch } from 'api';
 import Workout from './Workout';
 
 
-const mapStateToProps = ({ user: { id }, workouts }) => (
-  { id, workouts }
+const mapStateToProps = ({ user: { id: userId } }) => (
+  { userId }
 );
 
 const mapDispatchToProps = dispatch => (
   {
-    addToWorkouts: workouts => dispatch(addWorkouts(workouts)),
-    removeFromWorkouts: workouts => dispatch(removeWorkouts(workouts))
+    addToWorkouts: workouts => dispatch(addWorkouts(workouts))
   }
 );
 
@@ -22,12 +21,8 @@ class WorkoutContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      addingWorkout: false,
       fetchingUserWorkouts: true
     };
-    this.handleToggleNewWorkout = this.handleToggleNewWorkout.bind(this);
-    this.handleEditClick = this.handleEditClick.bind(this);
-    this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
   componentDidMount() {
@@ -35,8 +30,8 @@ class WorkoutContainer extends React.Component {
   }
 
   getWorkouts() {
-    const { id, addToWorkouts } = this.props;
-    if (id) {
+    const { userId, addToWorkouts } = this.props;
+    if (userId) {
       getFetch({
         url: '/api/workout',
         success: (workouts) => {
@@ -58,59 +53,10 @@ class WorkoutContainer extends React.Component {
     }
   }
 
-  getWorkoutProps() {
-    const { fetchingUserWorkouts, addingWorkout } = this.state;
-    const {
-      props: { workouts },
-      handleToggleNewWorkout,
-      handleEditClick,
-      handleDeleteClick
-    } = this;
-    return {
-      workouts,
-      fetchingUserWorkouts,
-      addingWorkout,
-      handleToggleNewWorkout,
-      handleEditClick,
-      handleDeleteClick
-    };
-  }
-
-  handleToggleNewWorkout() {
-    const { addingWorkout } = this.state;
-    this.setState({ addingWorkout: !addingWorkout });
-  }
-
-  handleEditClick(e) {
-    const { value } = e.target;
-
-  }
-
-  handleDeleteClick(e) {
-    const workoutId = +e.target.value;
-    const { id, removeFromWorkouts } = this.props;
-
-    if (id) {
-      deleteFetch({
-        url: '/api/workout',
-        body: {
-          id: workoutId
-        },
-        success: (workout) => {
-          removeFromWorkouts(workout.id);
-        }
-      });
-    } else {
-      removeFromWorkouts(workoutId);
-    }
-  }
-
   render() {
-    const workoutProps = this.getWorkoutProps();
+    const { fetchingUserWorkouts } = this.state;
     return (
-      <>
-        <Workout {...workoutProps} />
-      </>
+      <Workout fetchingUserWorkouts={fetchingUserWorkouts} />
     );
   }
 }
@@ -118,17 +64,10 @@ class WorkoutContainer extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkoutContainer));
 
 WorkoutContainer.propTypes = {
-  id: PropTypes.number,
-  workouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    created: PropTypes.instanceOf(Date),
-    lastCompleted: PropTypes.instanceOf(Date)
-  })).isRequired,
-  addToWorkouts: PropTypes.func.isRequired,
-  removeFromWorkouts: PropTypes.func.isRequired
+  userId: PropTypes.number,
+  addToWorkouts: PropTypes.func.isRequired
 };
 
 WorkoutContainer.defaultProps = {
-  id: undefined
+  userId: undefined
 };

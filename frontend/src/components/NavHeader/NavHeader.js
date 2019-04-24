@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Navbar, Nav } from 'react-bootstrap';
-import { changeUser, resetWorkouts } from 'state/actions';
-import { postFetch } from 'api/';
+import { changeUser, removeWorkouts } from 'state/actions';
+import { postFetch } from 'api';
 import weightliftingImg from 'assets/img/weightlifting.png';
 import styles from './navHeader.scss';
 
@@ -15,7 +15,7 @@ const mapStateToProps = ({ user: { id, username } }) => (
 const mapDispatchToProps = dispatch => (
   {
     changeToGuest: user => dispatch(changeUser(user)),
-    removeExistingWorkouts: () => dispatch(resetWorkouts())
+    resetWorkouts: () => dispatch(removeWorkouts())
   }
 );
 
@@ -33,11 +33,11 @@ class NavHeader extends React.Component {
   }
 
   handleLogout() {
-    const { removeExistingWorkouts, changeToGuest } = this.props;
+    const { resetWorkouts, changeToGuest } = this.props;
     postFetch({
       url: '/api/logout',
       success: (user) => {
-        removeExistingWorkouts();
+        resetWorkouts();
         changeToGuest(user);
       }
     });
@@ -85,7 +85,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(NavHeader);
 NavHeader.propTypes = {
   id: PropTypes.number,
   username: PropTypes.string.isRequired,
-  removeExistingWorkouts: PropTypes.func.isRequired,
+  resetWorkouts: PropTypes.func.isRequired,
   changeToGuest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired

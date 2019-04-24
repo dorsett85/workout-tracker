@@ -1,22 +1,32 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'react-bootstrap';
+import { setCreatingWorkout } from 'state/actions';
 import WorkoutCreate from './WorkoutCreate';
+import WorkoutEditModal from './WorkoutEditModal/WorkoutEditModal';
 import WorkoutCard from './WorkoutCard';
 
 
+const mapStateToProps = ({ workouts: { workouts, editingWorkoutId, creatingWorkout } }) => {
+  const workoutIds = workouts.map(workout => workout.id);
+  return { workoutIds, editingWorkoutId, creatingWorkout };
+};
+
+const mapDispatchToProps = dispatch => (
+  { showCreateWorkout: show => dispatch(setCreatingWorkout(show)) }
+);
+
 const Workout = (props) => {
-  const {
-    workouts, addingWorkout, fetchingUserWorkouts,
-    handleToggleNewWorkout, handleEditClick, handleDeleteClick
-  } = props;
+  const { workoutIds, creatingWorkout, showCreateWorkout, editingWorkoutId, fetchingUserWorkouts } = props;
+  const handleShowCreateWorkout = () => showCreateWorkout(true);
   return (
     <>
       <Row>
         <Col>
-          {!addingWorkout
-            ? <Button variant="success" onClick={handleToggleNewWorkout}>Add Workout</Button>
-            : <WorkoutCreate handleClose={handleToggleNewWorkout} />
+          {!creatingWorkout
+            ? <Button variant="success" onClick={handleShowCreateWorkout}>Add Workout</Button>
+            : <WorkoutCreate />
           }
         </Col>
       </Row>
@@ -25,37 +35,40 @@ const Workout = (props) => {
         <span>Here are your workouts:</span>
       </p>
       {!fetchingUserWorkouts && (
-        !workouts.length
-          ? (
-            <h4>
-              {'You haven\'t saved any workouts yet!'}
-            </h4>
-          )
-          : (
-            <Row>
-              {workouts.map(workout => (
-                <Col key={workout.id} xs={12} md={4} className="mb-4">
-                  <WorkoutCard
-                    {...workout}
-                    handleEditClick={handleEditClick}
-                    handleDeleteClick={handleDeleteClick}
-                  />
-                </Col>
-              ))}
-            </Row>
-          )
+        <>
+          {!editingWorkoutId && (
+            !workoutIds.length
+              ? (
+                <h4>
+                  {'You haven\'t saved any workouts yet!'}
+                </h4>
+              )
+              : (
+                <Row>
+                  {workoutIds.map(id => (
+                    <Col key={id} xs={12} md={4} className="mb-4">
+                      <WorkoutCard id={id} />
+                    </Col>
+                  ))}
+                </Row>
+              )
+          )}
+          <WorkoutEditModal />
+        </>
       )}
     </>
   );
 };
 
-export default Workout;
+export default connect(mapStateToProps, mapDispatchToProps)(Workout);
 
 Workout.propTypes = {
-  workouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    created: PropTypes.instanceOf(Date),
-    lastCompleted: PropTypes.instanceOf(Date)
-  })).isRequired
+  creatingWorkout: PropTypes.bool.isRequired,
+  showCreateWorkout: PropTypes.func.isRequired,
+  editingWorkoutId: PropTypes.number,
+  workoutIds: PropTypes.arrayOf(PropTypes.number).isRequired
+};
+
+Workout.defaultProps = {
+  editingWorkoutId: undefined
 };

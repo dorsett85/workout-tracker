@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, InputGroup, FormControl, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { addWorkouts } from 'state/actions/index';
+import { setCreatingWorkout, addWorkouts } from 'state/actions/index';
 import { postFetch } from 'api/';
 
 
@@ -11,10 +11,13 @@ const mapStateToProps = ({ user: { id: userId } }) => (
 );
 
 const mapDispatchToProps = dispatch => (
-  { addToWorkouts: workout => dispatch(addWorkouts(workout)) }
+  {
+    showCreatingWorkout: show => dispatch(setCreatingWorkout(show)),
+    addToWorkouts: workout => dispatch(addWorkouts(workout))
+  }
 );
 
-class WorkoutCreate extends React.Component {
+class WorkoutCreate extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +27,7 @@ class WorkoutCreate extends React.Component {
     this.workoutInputRef = React.createRef();
     this.workoutOverlayRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -39,10 +43,15 @@ class WorkoutCreate extends React.Component {
     });
   }
 
+  handleClose() {
+    const { showCreatingWorkout } = this.props;
+    showCreatingWorkout(false);
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const { name } = this.state;
-    const { userId, addToWorkouts, handleClose } = this.props;
+    const { userId, addToWorkouts, showCreatingWorkout } = this.props;
     this.workoutOverlayRef.current.hide();
 
     // Add workout to database if a user is logged in
@@ -53,7 +62,7 @@ class WorkoutCreate extends React.Component {
         success: ({ created, ...workout }) => {
           if (workout.id) {
             addToWorkouts({ ...workout, created: new Date(created) });
-            handleClose();
+            showCreatingWorkout(false);
           } else {
             this.workoutOverlayRef.current.show();
             this.setState({
@@ -68,14 +77,13 @@ class WorkoutCreate extends React.Component {
         name,
         created: new Date()
       });
-      handleClose();
+      showCreatingWorkout(false);
     }
   }
 
   render() {
     const { name, invalidWorkoutName } = this.state;
-    const { handleClose } = this.props;
-    const { workoutInputRef, workoutOverlayRef, handleChange, handleSubmit } = this;
+    const { workoutInputRef, workoutOverlayRef, handleChange, handleClose, handleSubmit } = this;
     return (
       <Row>
         <Col xs={12} md={4}>
@@ -128,7 +136,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(WorkoutCreate);
 
 WorkoutCreate.propTypes = {
   userId: PropTypes.number,
-  handleClose: PropTypes.func.isRequired,
+  showCreatingWorkout: PropTypes.func.isRequired,
   addToWorkouts: PropTypes.func.isRequired
 };
 
