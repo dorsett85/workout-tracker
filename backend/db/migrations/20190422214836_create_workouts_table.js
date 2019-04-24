@@ -3,7 +3,7 @@ exports.up = function up(knex) {
   return knex.schema.raw(`
     CREATE TABLE workouts (
       id serial primary key,
-      user_id integer references users(id),
+      user_id integer NOT NULL REFERENCES users(id),
       name varchar not null,
       created timestamp,
       last_completed timestamp,

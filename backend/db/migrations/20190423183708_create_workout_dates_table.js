@@ -3,7 +3,7 @@ exports.up = function up(knex) {
   return knex.schema.raw(`
     CREATE TABLE workout_dates (
       id serial PRIMARY KEY,
-      workout_id integer REFERENCES workouts(id) NOT NULL,
+      workout_id integer NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
       date timestamp NOT NULL,
       notes varchar,
       completed bool DEFAULT FALSE
