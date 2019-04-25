@@ -1,74 +1,70 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, Button } from 'react-bootstrap';
-import { setCreatingWorkout } from 'state/actions';
+import { Row, Col } from 'react-bootstrap';
+import { addWorkouts, setFetchingWorkouts } from 'state/actions';
+import { getFetch } from 'api';
 import WorkoutCreate from './WorkoutCreate';
+import WorkoutList from './WorkoutList';
 import WorkoutEditorModal from './WorkoutEditor/WorkoutEditorModal';
-import WorkoutCard from './WorkoutCard';
 
 
-const mapStateToProps = ({ workouts: { workouts, editingWorkoutId, creatingWorkout } }) => {
-  const workoutIds = workouts.map(workout => workout.id);
-  return { workoutIds, editingWorkoutId, creatingWorkout };
-};
+const mapStateToProps = ({
+  user: { id: userId },
+  workouts: { fetchingWorkouts }
+}) => ({ userId, fetchingWorkouts });
 
 const mapDispatchToProps = dispatch => (
-  { showCreateWorkout: show => dispatch(setCreatingWorkout(show)) }
+  {
+    setFetching: bool => dispatch(setFetchingWorkouts(bool)),
+    addToWorkouts: workouts => dispatch(addWorkouts(workouts))
+  }
 );
 
 const Workout = (props) => {
-  const { workoutIds, creatingWorkout, showCreateWorkout, editingWorkoutId, fetchingUserWorkouts } = props;
-  const handleShowCreateWorkout = () => showCreateWorkout(true);
-  return (
-    <>
-      <Row>
-        <Col>
-          {!creatingWorkout
-            ? <Button variant="success" onClick={handleShowCreateWorkout}>Add Workout</Button>
-            : <WorkoutCreate />
+  const { userId, addToWorkouts, setFetching, fetchingWorkouts } = props;
+  useEffect(() => {
+    if (fetchingWorkouts) {
+      if (userId) {
+        getFetch({
+          url: '/api/workout',
+          success: (workouts) => {
+            if (workouts.length) {
+              const workoutsWithDate = workouts.map(({ created, ...workout }) => (
+                { ...workout, created: new Date(created) }
+              ));
+              addToWorkouts(workoutsWithDate);
+            }
+            setFetching(false);
           }
-        </Col>
-      </Row>
-      <hr />
-      <p>
-        <span>Here are your workouts:</span>
-      </p>
-      {!fetchingUserWorkouts && (
-        <>
-          {!editingWorkoutId && (
-            !workoutIds.length
-              ? (
-                <h4>
-                  {'You haven\'t saved any workouts yet!'}
-                </h4>
-              )
-              : (
-                <Row>
-                  {workoutIds.map(id => (
-                    <Col key={id} xs={12} md={4} className="mb-4">
-                      <WorkoutCard id={id} />
-                    </Col>
-                  ))}
-                </Row>
-              )
-          )}
-          <WorkoutEditorModal />
-        </>
-      )}
-    </>
+        });
+      } else {
+        setFetching(false);
+      }
+    }
+  }, []);
+
+  return (
+    <Row>
+      <Col>
+        <WorkoutCreate />
+        <hr />
+        <WorkoutList />
+        <WorkoutEditorModal />
+      </Col>
+    </Row>
   );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workout);
 
 Workout.propTypes = {
-  creatingWorkout: PropTypes.bool.isRequired,
-  showCreateWorkout: PropTypes.func.isRequired,
-  editingWorkoutId: PropTypes.number,
-  workoutIds: PropTypes.arrayOf(PropTypes.number).isRequired
+  userId: PropTypes.number,
+  addToWorkouts: PropTypes.func.isRequired,
+  fetchingWorkouts: PropTypes.bool.isRequired,
+  setFetching: PropTypes.func.isRequired
 };
 
 Workout.defaultProps = {
-  editingWorkoutId: undefined
+  userId: undefined
 };

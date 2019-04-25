@@ -1,36 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Row, Col } from 'react-bootstrap';
 import styles from 'assets/css/app.scss';
-import WorkoutContainer from './Workout/WorkoutContainer';
+import Workout from './Workout/Workout';
 
 
 const mapStateToProps = ({ user }) => (
   { user }
 );
 
-
-class User extends React.Component {
-  constructor(props) {
-    super(props);
-
-    /**
-     * TODO 4/20/19
-     * Add additional user functionality other than workouts
-     */
-    this.state = {};
-  }
-
-  render() {
-    const { user: { username } } = this.props;
-    return (
-      <div className={styles.fadeIn}>
+const User = (props) => {
+  const { user: { username } } = props;
+  return (
+    <Row className={styles.fadeIn}>
+      <Col>
         <h2 className="mb-3">{`Welcome ${username}`}</h2>
-        <WorkoutContainer />
-      </div>
-    );
-  }
-}
+        <Workout />
+      </Col>
+    </Row>
+  );
+};
 
 export default connect(mapStateToProps)(User);
 

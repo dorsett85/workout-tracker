@@ -2,41 +2,42 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-import { editWorkout } from 'state/actions';
+import { setCurrentWorkout } from 'state/actions';
 import lazyLoad from '../../../UI/lazyLoad';
 
 
-const mapStateToProps = ({ workouts: { workouts, editingWorkoutId } }) => (
-  { workouts, editingWorkoutId }
+const mapStateToProps = ({ workouts: { currentWorkout } }) => (
+  { currentWorkout }
 );
 
 const mapDispatchToProps = dispatch => (
-  { unsetEditWorkout: () => dispatch(editWorkout()) }
+  {
+    unsetCurrent: bool => dispatch(setCurrentWorkout(bool))
+  }
 );
 
 const WorkoutEditorModal = (props) => {
-  const { workouts, editingWorkoutId, unsetEditWorkout } = props;
+  const { unsetCurrent, currentWorkout } = props;
   const [name, setName] = useState(null);
   const [workoutEditor, setWorkoutEditor] = useState(null);
 
   // Add component functions
   const handleOnShow = () => {
-    const workoutTmp = workouts.find(workout => workout.id === editingWorkoutId);
-    setName(workoutTmp.name);
-    
+    setName(currentWorkout.name);
+
     // Lazy load the workout editor
     const WorkoutEditor = lazyLoad(import('./WorkoutEditor'));
-    setWorkoutEditor(WorkoutEditor);
+    setWorkoutEditor(<WorkoutEditor />);
   };
 
   // Make sure to remove the workout editor before unsetting the editing workout id
   const handleOnHide = () => {
     setWorkoutEditor(null);
-    unsetEditWorkout();
+    unsetCurrent();
   };
 
   return (
-    <Modal show={Boolean(editingWorkoutId)} onHide={handleOnHide} onShow={handleOnShow}>
+    <Modal show={Boolean(currentWorkout)} onHide={handleOnHide} onShow={handleOnShow} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>
           {name}
@@ -52,11 +53,13 @@ const WorkoutEditorModal = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(WorkoutEditorModal);
 
 WorkoutEditorModal.propTypes = {
-  workouts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  editingWorkoutId: PropTypes.number,
-  unsetEditWorkout: PropTypes.func.isRequired
+  currentWorkout: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
+  }),
+  unsetCurrent: PropTypes.func.isRequired
 };
 
 WorkoutEditorModal.defaultProps = {
-  editingWorkoutId: undefined
+  currentWorkout: undefined
 };

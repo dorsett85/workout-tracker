@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Navbar, Nav } from 'react-bootstrap';
-import { changeUser, removeWorkouts } from 'state/actions';
+import { changeUser, removeWorkouts, setFetchingWorkouts } from 'state/actions';
 import { postFetch } from 'api';
 import weightliftingImg from 'assets/img/weightlifting.png';
 import styles from './navHeader.scss';
@@ -15,7 +15,8 @@ const mapStateToProps = ({ user: { id, username } }) => (
 const mapDispatchToProps = dispatch => (
   {
     changeToGuest: user => dispatch(changeUser(user)),
-    resetWorkouts: () => dispatch(removeWorkouts())
+    resetWorkouts: () => dispatch(removeWorkouts()),
+    setFetching: bool => dispatch(setFetchingWorkouts(bool))
   }
 );
 
@@ -28,16 +29,18 @@ class NavHeader extends React.Component {
 
   handleLinkClick(path) {
     const { history, location: { pathname } } = this.props;
+    if (pathname === path) { return; }
     if (!['/', '/login', '/register', '/guest'].includes(pathname) && path === '/') { return; }
     history.push(path);
   }
 
   handleLogout() {
-    const { resetWorkouts, changeToGuest } = this.props;
+    const { resetWorkouts, setFetching, changeToGuest } = this.props;
     postFetch({
       url: '/api/logout',
       success: (user) => {
         resetWorkouts();
+        setFetching(true);
         changeToGuest(user);
       }
     });
@@ -60,8 +63,8 @@ class NavHeader extends React.Component {
           />
           {'Workout Tracker'}
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle />
+        <Navbar.Collapse>
           <Nav className="ml-auto">
             <Nav.Link onClick={() => handleLinkClick('/')}>
               {id ? username : 'Home'}
@@ -86,6 +89,7 @@ NavHeader.propTypes = {
   id: PropTypes.number,
   username: PropTypes.string.isRequired,
   resetWorkouts: PropTypes.func.isRequired,
+  setFetching: PropTypes.func.isRequired,
   changeToGuest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired

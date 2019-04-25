@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Col, Row, Card, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap';
-import { editWorkout, removeWorkouts } from 'state/actions';
+import { removeWorkouts, setCurrentWorkout } from 'state/actions';
 import { deleteFetch } from 'api';
 import styles from 'assets/css/app.scss';
 
@@ -14,13 +14,21 @@ const mapStateToProps = ({ user: { id: userId }, workouts: { workouts } }, { id 
 
 const mapDispatchToProps = dispatch => (
   {
-    setEditWorkout: id => dispatch(editWorkout(id)),
+    setCurrent: id => dispatch(setCurrentWorkout(id)),
     removeFromWorkouts: workouts => dispatch(removeWorkouts(workouts))
   }
 );
 
 const WorkoutCard = (props) => {
-  const { userId, id, name, created, lastCompleted, setEditWorkout, removeFromWorkouts } = props;
+  const {
+    userId,
+    id,
+    name,
+    created,
+    lastCompleted,
+    setCurrent,
+    removeFromWorkouts
+  } = props;
 
   // Set up a ref for the delete confirmation overlay
   const deleteRef = React.createRef();
@@ -28,9 +36,7 @@ const WorkoutCard = (props) => {
     deleteRef.current.hide()
   );
 
-  const handleEditClick = () => {
-    setEditWorkout(id);
-  };
+  const handleEditClick = () => setCurrent(id);
 
   const handleConfirmDelete = () => {
     deleteRef.current.hide();
@@ -114,7 +120,7 @@ WorkoutCard.propTypes = {
   name: PropTypes.string.isRequired,
   created: PropTypes.instanceOf(Date).isRequired,
   lastCompleted: PropTypes.instanceOf(Date),
-  setEditWorkout: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired,
   removeFromWorkouts: PropTypes.func.isRequired
 };
 

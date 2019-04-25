@@ -3,15 +3,18 @@ export const CHANGE_USER = 'CHANGE_USER';
 export const LOADING_USER = 'LOADING_USER';
 
 export const SET_CREATING_WORKOUT = 'SET_CREATING_WORKOUT';
+export const SET_CURRENT_WORKOUT = 'SET_CURRENT_WORKOUT';
+export const SET_FETCHING_WORKOUTS = 'SET_FETCHING_WORKOUTS';
 export const ADD_WORKOUTS = 'ADD_WORKOUTS';
-export const EDIT_WORKOUT = 'EDIT_WORKOUT';
 export const REMOVE_WORKOUTS = 'REMOVE_WORKOUTS';
 
 
+// App actions
 const setAppLoaded = payload => (
   { type: APP_LOADED, payload }
 );
 
+// User actions
 const changeUser = payload => (
   { type: CHANGE_USER, payload }
 );
@@ -25,12 +28,16 @@ const setCreatingWorkout = payload => (
   { type: SET_CREATING_WORKOUT, payload }
 );
 
-const addWorkouts = payload => (
-  { type: ADD_WORKOUTS, payload }
+const setCurrentWorkout = payload => (
+  { type: SET_CURRENT_WORKOUT, payload }
 );
 
-const editWorkout = payload => (
-  { type: EDIT_WORKOUT, payload }
+const setFetchingWorkouts = payload => (
+  { type: SET_FETCHING_WORKOUTS, payload }
+);
+
+const addWorkouts = payload => (
+  { type: ADD_WORKOUTS, payload }
 );
 
 const removeWorkouts = payload => (
@@ -42,7 +49,8 @@ export {
   changeUser,
   loadingUser,
   setCreatingWorkout,
+  setCurrentWorkout,
+  setFetchingWorkouts,
   addWorkouts,
-  editWorkout,
   removeWorkouts,
 };
