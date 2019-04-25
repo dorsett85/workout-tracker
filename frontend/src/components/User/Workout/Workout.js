@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'react-bootstrap';
 import { setCreatingWorkout } from 'state/actions';
 import WorkoutCreate from './WorkoutCreate';
-import WorkoutEditModal from './WorkoutEditModal/WorkoutEditModal';
+import WorkoutEditorModal from './WorkoutEditor/WorkoutEditorModal';
 import WorkoutCard from './WorkoutCard';
 
 
@@ -53,7 +53,7 @@ const Workout = (props) => {
                 </Row>
               )
           )}
-          <WorkoutEditModal />
+          <WorkoutEditorModal />
         </>
       )}
     </>
