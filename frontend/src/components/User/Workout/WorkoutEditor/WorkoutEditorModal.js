@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
@@ -20,15 +20,12 @@ const WorkoutEditorModal = (props) => {
   const { unsetCurrent, currentWorkout } = props;
   const [name, setName] = useState(null);
   const [workoutEditor, setWorkoutEditor] = useState(null);
-
-  // Add component functions
-  const handleOnShow = () => {
-    setName(currentWorkout.name);
-
-    // Lazy load the workout editor
-    const WorkoutEditor = lazyLoad(import('./WorkoutEditor'));
-    setWorkoutEditor(<WorkoutEditor />);
-  };
+  useEffect(() => {
+    if (currentWorkout) {
+      setName(currentWorkout.name);
+      setWorkoutEditor(lazyLoad(import('./WorkoutEditor')));
+    }
+  }, [currentWorkout]);
 
   // Make sure to remove the workout editor before unsetting the editing workout id
   const handleOnHide = () => {
@@ -37,7 +34,7 @@ const WorkoutEditorModal = (props) => {
   };
 
   return (
-    <Modal show={Boolean(currentWorkout)} onHide={handleOnHide} onShow={handleOnShow} size="xl">
+    <Modal show={Boolean(currentWorkout)} onHide={handleOnHide} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>
           {name}

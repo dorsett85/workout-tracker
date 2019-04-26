@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
-import { addWorkouts, setFetchingWorkouts } from 'state/actions';
+import { addWorkouts, setFetchingWorkouts, removeWorkouts } from 'state/actions';
 import { getFetch } from 'api';
 import WorkoutCreate from './WorkoutCreate';
 import WorkoutList from './WorkoutList';
@@ -17,14 +17,16 @@ const mapStateToProps = ({
 const mapDispatchToProps = dispatch => (
   {
     setFetching: bool => dispatch(setFetchingWorkouts(bool)),
-    addToWorkouts: workouts => dispatch(addWorkouts(workouts))
+    addToWorkouts: workouts => dispatch(addWorkouts(workouts)),
+    resetWorkouts: () => dispatch(removeWorkouts()),
   }
 );
 
 const Workout = (props) => {
-  const { userId, addToWorkouts, setFetching, fetchingWorkouts } = props;
+  const { userId, addToWorkouts, setFetching, fetchingWorkouts, resetWorkouts } = props;
   useEffect(() => {
     if (fetchingWorkouts) {
+      resetWorkouts();
       if (userId) {
         getFetch({
           url: '/api/workout',
@@ -35,13 +37,14 @@ const Workout = (props) => {
               ));
               addToWorkouts(workoutsWithDate);
             }
-            setFetching(false);
           }
         });
-      } else {
-        setFetching(false);
       }
+      setFetching(false);
     }
+
+    // Reset fetching to true on unmount
+    return () => setFetching(true);
   }, []);
 
   return (
@@ -62,7 +65,8 @@ Workout.propTypes = {
   userId: PropTypes.number,
   addToWorkouts: PropTypes.func.isRequired,
   fetchingWorkouts: PropTypes.bool.isRequired,
-  setFetching: PropTypes.func.isRequired
+  setFetching: PropTypes.func.isRequired,
+  resetWorkouts: PropTypes.func.isRequired
 };
 
 Workout.defaultProps = {

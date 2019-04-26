@@ -40,8 +40,11 @@ class WorkoutCreate extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.handleClose();
+  }
+
   handleChange(e) {
-    this.workoutOverlayRef.current.hide();
     this.setState({
       name: e.target.value,
       invalidWorkoutName: null
