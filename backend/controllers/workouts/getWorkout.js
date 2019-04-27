@@ -16,8 +16,13 @@ const getWorkout = async (req, res) => {
   }
   if (type === 'results') {
     const { rows } = await knex.raw(`
-      
-    `);
+      SELECT * FROM workout_results
+      WHERE workout_id = (
+          SELECT id
+          FROM workouts
+          WHERE id = :workoutId AND user_id = :userId 
+      )
+    `, { workoutId, userId });
     return res.json(rows);
   }
   return res.status(400).json('Invalid type parameter in request');

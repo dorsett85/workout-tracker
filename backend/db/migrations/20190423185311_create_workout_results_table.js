@@ -7,7 +7,8 @@ exports.up = function up(knex) {
       exercise_id integer NOT NULL REFERENCES exercises(id) ON DELETE CASCADE,
       date_id integer NOT NULL REFERENCES workout_dates(id) ON DELETE CASCADE,
       value varchar,
-      notes varchar
+      notes varchar,
+      UNIQUE(workout_id, exercise_id, date_id)
     )
   `);
 };

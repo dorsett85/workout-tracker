@@ -6,17 +6,17 @@ import { useInitialData } from './hooks';
 import LoadingSpinner from '../../../UI/LoadingSpinner';
 
 
-const mapStateToProps = ({ user: { id: userId }, workouts: { currentWorkout } }) => (
-  { userId, currentWorkout }
+const mapStateToProps = ({ workouts: { currentWorkout } }) => (
+  { currentWorkout }
 );
 
 const WorkoutEditor = (props) => {
-  const { userId, currentWorkout: { id, created } } = props;
+  const { currentWorkout: { id, created } } = props;
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
 
   // Initial call to fetch workout data
-  useInitialData(userId, id, (data) => {
+  useInitialData(id, (data) => {
     console.log(data);
     setLoading(false);
   });
@@ -47,13 +47,8 @@ const WorkoutEditor = (props) => {
 export default connect(mapStateToProps)(WorkoutEditor);
 
 WorkoutEditor.propTypes = {
-  userId: PropTypes.number,
   currentWorkout: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.instanceOf(Date)
   }).isRequired
-};
-
-WorkoutEditor.defaultProps = {
-  userId: undefined
 };

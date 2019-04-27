@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import { Modal, Alert } from 'react-bootstrap';
 import { setCurrentWorkout } from 'state/actions';
 import lazyLoad from '../../../UI/lazyLoad';
 
 
-const mapStateToProps = ({ workouts: { currentWorkout } }) => (
-  { currentWorkout }
+const mapStateToProps = ({ user: { id: userId }, workouts: { currentWorkout } }) => (
+  { userId, currentWorkout }
 );
 
 const mapDispatchToProps = dispatch => (
@@ -17,13 +17,24 @@ const mapDispatchToProps = dispatch => (
 );
 
 const WorkoutEditorModal = (props) => {
-  const { unsetCurrent, currentWorkout } = props;
+  const { userId, unsetCurrent, currentWorkout } = props;
   const [name, setName] = useState(null);
   const [workoutEditor, setWorkoutEditor] = useState(null);
   useEffect(() => {
     if (currentWorkout) {
       setName(currentWorkout.name);
-      setWorkoutEditor(lazyLoad(import('./WorkoutEditor')));
+
+      // End of the line for non-users!!
+      if (userId) {
+        setWorkoutEditor(lazyLoad(import('./WorkoutEditor')));
+      } else {
+        setWorkoutEditor(
+          <Alert variant="danger">
+            <Alert.Heading>Sorry!</Alert.Heading>
+            <p>Sign in or Register to use this feature</p>
+          </Alert>
+        );
+      }
     }
   }, [currentWorkout]);
 
@@ -50,6 +61,7 @@ const WorkoutEditorModal = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(WorkoutEditorModal);
 
 WorkoutEditorModal.propTypes = {
+  userId: PropTypes.number,
   currentWorkout: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
@@ -58,5 +70,6 @@ WorkoutEditorModal.propTypes = {
 };
 
 WorkoutEditorModal.defaultProps = {
+  userId: undefined,
   currentWorkout: undefined
 };

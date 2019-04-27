@@ -4,7 +4,7 @@ exports.up = function up(knex) {
     CREATE TABLE exercises (
       id serial PRIMARY KEY,
       workout_id integer NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
-      name varchar NOT NULL,
+      name varchar NOT NULL UNIQUE,
       unit varchar,
       notes varchar
     )
