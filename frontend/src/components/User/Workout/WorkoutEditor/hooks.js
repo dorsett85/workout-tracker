@@ -2,17 +2,17 @@ import { useEffect } from 'react';
 import { getFetch } from 'api/';
 
 
-export function useInitialData(userId, workoutId, callback, deps = []) {
+export function useInitialData(userId, workoutId, callback) {
   useEffect(() => {
     if (userId) {
       getFetch({
-        url: `/api/workout/${workoutId}`,
+        url: `/api/workout/results/${workoutId}`,
         success: data => callback(data)
       });
     } else {
       callback([]);
     }
-  }, deps);
+  }, []);
 }
 
 export function useAddExercise(callback) {

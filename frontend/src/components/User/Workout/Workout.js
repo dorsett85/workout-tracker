@@ -29,7 +29,7 @@ const Workout = (props) => {
       resetWorkouts();
       if (userId) {
         getFetch({
-          url: '/api/workout',
+          url: '/api/workout/all',
           success: (workouts) => {
             if (workouts.length) {
               const workoutsWithDate = workouts.map(({ created, ...workout }) => (

@@ -20,8 +20,14 @@
  *   error: err => console.log(err)
  * });
  */
-const ajaxFetch = ({ url, options, success, error = console.log }) => (
-  fetch(url, options)
+const ajaxFetch = ({ url, options = {}, success, error = console.error }) => (
+  fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
     .then((res) => {
       if (!res.ok) { throw res; }
       return res.json();

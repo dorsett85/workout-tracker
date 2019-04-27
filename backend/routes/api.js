@@ -6,7 +6,6 @@ const login = require('../controllers/login');
 const register = require('../controllers/register');
 const logout = require('../controllers/logout');
 const getWorkout = require('../controllers/workouts/getWorkout');
-const getWorkoutResults = require('../controllers/workouts/getWorkoutResults');
 const createWorkout = require('../controllers/workouts/createWorkout');
 const deleteWorkout = require('../controllers/workouts/deleteWorkout');
 
@@ -21,8 +20,7 @@ router.post('/logout', asyncErrorHandler(logout));
 
 // User workout routes
 router.use('/workout', checkAuthorization);
-router.get('/workout', asyncErrorHandler(getWorkout));
-router.get('/workout/:id', asyncErrorHandler(getWorkoutResults));
+router.get('/workout/:type/:id?', asyncErrorHandler(getWorkout));
 router.post('/workout', asyncErrorHandler(createWorkout));
 router.put('/workout');
 router.delete('/workout', asyncErrorHandler(deleteWorkout));

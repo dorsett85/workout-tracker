@@ -18,7 +18,6 @@ const WorkoutEditor = (props) => {
   // Initial call to fetch workout data
   useInitialData(userId, id, (data) => {
     console.log(data);
-    // setResults(data);
     setLoading(false);
   });
 

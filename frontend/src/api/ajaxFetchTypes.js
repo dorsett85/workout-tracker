@@ -17,15 +17,14 @@ const getFetch = ajaxFetch;
  * @see ajaxFetch
  */
 const postFetch = ({ url, options = {}, body, success, error }) => {
-  const { headers, ...moreOptions } = options;
   const postOptions = {
     method: 'POST',
     headers: {
-      ...headers,
+      ...options.headers,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
-    ...moreOptions
+    ...options
   };
   return ajaxFetch({
     url,
