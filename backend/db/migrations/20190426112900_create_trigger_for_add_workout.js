@@ -21,8 +21,9 @@ exports.up = function up(knex) {
             )
 
             -- ADD id's from newly created records to the results table
-            INSERT INTO workout_results (exercise_id, date_id)
+            INSERT INTO workout_results (workout_id, exercise_id, date_id)
                 VALUES (
+                    NEW.id,
                     (SELECT id FROM exercise),
                     (SELECT id FROM date)
                 ); 

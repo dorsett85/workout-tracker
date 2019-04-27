@@ -15,7 +15,10 @@ const getWorkout = async (req, res) => {
     return res.json(rows);
   }
   if (type === 'results') {
-    return res.json('asdf');
+    const { rows } = await knex.raw(`
+      
+    `);
+    return res.json(rows);
   }
   return res.status(400).json('Invalid type parameter in request');
 };
