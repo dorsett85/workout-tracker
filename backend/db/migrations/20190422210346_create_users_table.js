@@ -2,10 +2,10 @@
 exports.up = function up(knex) {
   return knex.schema.raw(`
     CREATE TABLE users (
-      id serial primary key,
-      username varchar not null unique,
-      password varchar not null,
-      created timestamp not null,
+      id serial PRIMARY KEY,
+      username varchar NOT NULL UNIQUE,
+      password varchar NOT NULL,
+      created timestamp NOT NULL,
       last_login timestamp
     )
   `);

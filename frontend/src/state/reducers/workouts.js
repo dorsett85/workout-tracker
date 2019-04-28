@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   workouts: [],
-  currentWorkout: undefined,
+  currentWorkout: {},
   creatingWorkout: false,
   fetchingWorkouts: true,
   editingWorkout: false
@@ -20,8 +20,8 @@ const workouts = (state = initialState, { type, payload }) => {
     return { ...state, creatingWorkout: payload };
   }
   if (type === SET_CURRENT_WORKOUT) {
-    const workout = state.workouts.find(workoutInfo => workoutInfo.id === payload);
-    return { ...state, currentWorkout: workout };
+    const currentWorkout = state.workouts.find(workoutInfo => workoutInfo.id === payload) || {};
+    return { ...state, currentWorkout };
   }
   if (type === SET_FETCHING_WORKOUTS) {
     return { ...state, fetchingWorkouts: payload };

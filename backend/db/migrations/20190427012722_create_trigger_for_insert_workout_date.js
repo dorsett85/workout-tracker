@@ -9,6 +9,7 @@ exports.up = function up(knex) {
                     id AS exercise_id,
                     NEW.id AS date_id
                 FROM exercises
+                WHERE workout_id = NEW.workout_id
             )
             INSERT INTO workout_results (workout_id, exercise_id, date_id)
             SELECT * FROM wr;
@@ -25,7 +26,7 @@ exports.up = function up(knex) {
 
 exports.down = function down(knex) {
   return knex.schema.raw(`
-    DROP TRIGGER IF EXISTS trigger_workout_dates_insert ON exercises;
+    DROP TRIGGER IF EXISTS trigger_workout_dates_insert ON workout_dates;
     DROP FUNCTION IF EXISTS insert_dates_into_workout_results;
   `);
 };

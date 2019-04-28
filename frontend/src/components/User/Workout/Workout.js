@@ -31,16 +31,16 @@ const Workout = (props) => {
         getFetch({
           url: '/api/workout/all',
           success: (workouts) => {
-            if (workouts.length) {
-              const workoutsWithDate = workouts.map(({ created, ...workout }) => (
-                { ...workout, created: new Date(created) }
-              ));
-              addToWorkouts(workoutsWithDate);
-            }
+            const workoutsWithDate = workouts.map(({ created, ...workout }) => (
+              { ...workout, created: new Date(created) }
+            ));
+            addToWorkouts(workoutsWithDate);
+            setFetching(false);
           }
         });
+      } else {
+        setFetching(false);
       }
-      setFetching(false);
     }
 
     // Reset fetching to true on unmount

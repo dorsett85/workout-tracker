@@ -7,36 +7,31 @@ import lazyLoad from '../../../UI/lazyLoad';
 
 
 const mapStateToProps = ({ user: { id: userId }, workouts: { currentWorkout } }) => (
-  { userId, currentWorkout }
+  { userId, ...currentWorkout }
 );
 
 const mapDispatchToProps = dispatch => (
   {
-    unsetCurrent: bool => dispatch(setCurrentWorkout(bool))
+    unsetCurrent: () => dispatch(setCurrentWorkout())
   }
 );
 
 const WorkoutEditorModal = (props) => {
-  const { userId, unsetCurrent, currentWorkout } = props;
-  const [name, setName] = useState(null);
+  const { userId, unsetCurrent, id, name } = props;
   const [workoutEditor, setWorkoutEditor] = useState(null);
   useEffect(() => {
-    if (currentWorkout) {
-      setName(currentWorkout.name);
-
+    if (id) {
       // End of the line for non-users!!
-      if (userId) {
-        setWorkoutEditor(lazyLoad(import('./WorkoutEditor')));
-      } else {
-        setWorkoutEditor(
+      setWorkoutEditor(userId
+        ? lazyLoad(import('./WorkoutEditor'))
+        : (
           <Alert variant="danger">
             <Alert.Heading>Sorry!</Alert.Heading>
             <p>Sign in or Register to use this feature</p>
           </Alert>
-        );
-      }
+        ));
     }
-  }, [currentWorkout]);
+  }, [id]);
 
   // Make sure to remove the workout editor before unsetting the editing workout id
   const handleOnHide = () => {
@@ -45,7 +40,7 @@ const WorkoutEditorModal = (props) => {
   };
 
   return (
-    <Modal show={Boolean(currentWorkout)} onHide={handleOnHide} size="xl">
+    <Modal show={Boolean(id)} onHide={handleOnHide} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>
           {name}
@@ -62,14 +57,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(WorkoutEditorModal);
 
 WorkoutEditorModal.propTypes = {
   userId: PropTypes.number,
-  currentWorkout: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
-  }),
+  id: PropTypes.number,
+  name: PropTypes.string,
   unsetCurrent: PropTypes.func.isRequired
 };
 
 WorkoutEditorModal.defaultProps = {
   userId: undefined,
-  currentWorkout: undefined
+  id: undefined,
+  name: undefined
 };

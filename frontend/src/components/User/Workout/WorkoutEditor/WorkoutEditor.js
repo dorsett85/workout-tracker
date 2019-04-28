@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
+import workoutEditorReducer from './reducer';
+import { setInitialData } from './actions';
 import { useInitialData } from './hooks';
 import LoadingSpinner from '../../../UI/LoadingSpinner';
 
 
-const mapStateToProps = ({ workouts: { currentWorkout } }) => (
-  { currentWorkout }
+const mapStateToProps = ({ workouts: { currentWorkout: { id } } }) => (
+  { id }
 );
 
 const WorkoutEditor = (props) => {
-  const { currentWorkout: { id, created } } = props;
-  const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState([]);
+  const { id } = props;
+  const [workoutData, dispatch] = useReducer(workoutEditorReducer, []);
 
   // Initial call to fetch workout data
-  useInitialData(id, (data) => {
-    console.log(data);
-    setLoading(false);
-  });
+  useInitialData(id, data => dispatch(setInitialData(data)));
 
-  return loading
+  return !workoutData.length
     ? <LoadingSpinner />
     : (
       <Table variant="dark" size="sm" striped bordered hover responsive>
-        <caption>{results}</caption>
+        <caption>{new Date().toLocaleString()}</caption>
         <thead>
           <tr>
-            <th>Exercise 1</th>
-            <th>Exercise 1</th>
-            <th>Exercise 1</th>
+            {Object.keys(workoutData[0]).map(key => (
+              <th key={key}>{key !== 'date' ? workoutData[0][key].exName : key}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-          </tr>
+          {workoutData.map(row => (
+            <tr key={row.date.wdId}>
+              {Object.keys(row).map(key => (
+                <td key={key}>{key !== 'date' ? row[key].wrValue : row[key].wdDate.toLocaleString()}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </Table>
     );
@@ -47,8 +47,5 @@ const WorkoutEditor = (props) => {
 export default connect(mapStateToProps)(WorkoutEditor);
 
 WorkoutEditor.propTypes = {
-  currentWorkout: PropTypes.shape({
-    id: PropTypes.number,
-    created: PropTypes.instanceOf(Date)
-  }).isRequired
+  id: PropTypes.number.isRequired
 };

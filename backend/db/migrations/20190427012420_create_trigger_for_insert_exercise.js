@@ -9,6 +9,7 @@ exports.up = function up(knex) {
                     NEW.id AS exercise_id,
                     id AS date_id
                 FROM workout_dates
+                WHERE workout_id = NEW.workout_id
             )
             INSERT INTO workout_results (workout_id, exercise_id, date_id)
             SELECT * FROM wr;
