@@ -2,12 +2,12 @@
 exports.up = function up(knex) {
   return knex.schema.raw(`
     CREATE TABLE workouts (
-      id serial primary key,
+      id serial PRIMARY KEY,
       user_id integer NOT NULL REFERENCES users(id),
-      name varchar not null,
+      name varchar NOT NULL,
       created timestamp,
       last_completed timestamp,
-      unique(user_id, name)
+      UNIQUE(user_id, name)
     )
   `);
 };
