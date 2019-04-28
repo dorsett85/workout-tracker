@@ -5,7 +5,6 @@ const createWorkout = async (req, res) => {
   const { user: { id }, body: { name } } = req;
 
   // Create and insert new workout
-  console.log(name);
   let newWorkout;
   try {
     newWorkout = await knex.raw(`
