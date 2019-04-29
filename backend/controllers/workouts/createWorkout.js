@@ -13,14 +13,15 @@ const createWorkout = async (req, res) => {
       returning id, name, created
     `, { id, name, created: new Date() });
   } catch (err) {
-    // Safely send back workout with missing id
-    if (err.code === '23505') { return res.json({ id: '' }); }
+    // Error for duplicate name
+    if (err.code === '23505') { return res.json(null); }
     throw err;
   }
 
   // Return the new workout
-  const { rows: [workout] } = newWorkout;
-  return res.json(workout);
+  const { rows } = newWorkout;
+  console.log(rows);
+  return res.json(rows);
 };
 
 module.exports = createWorkout;

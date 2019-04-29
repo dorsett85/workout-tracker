@@ -1,23 +1,22 @@
 export const convertQueryData = data => (
   data.reduce((acc, row) => {
     const {
-      wid: wId,
       exid: exId,
-      exname: exName,
+      name,
       exnotes: exNotes,
-      exunits: exUnits,
+      units,
       wdid: wdId,
-      wddate: wdDate,
+      date,
       wdnotes: wdNotes,
-      wdcompleted: wdCompleted,
+      completed,
       wrid: wrId,
-      wrvalue: wrValue,
+      value,
       wrnotes: wrNotes
     } = row;
 
     // Define the exercise property to attach to each workout date
     const exercise = {
-      wId, exId, exName, exNotes, exUnits, wrId, wrValue, wrNotes
+      exId, name, exNotes, units, wrId, value: value || '', wrNotes
     };
 
     /**
@@ -28,7 +27,7 @@ export const convertQueryData = data => (
     if (idx === -1) {
       const newRow = {
         date: {
-          wdId, wdDate: new Date(wdDate), wdNotes, wdCompleted
+          wdId, date: new Date(date), wdNotes, completed
         },
         [`exercise${exId}`]: exercise
       };

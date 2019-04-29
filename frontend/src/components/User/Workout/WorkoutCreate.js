@@ -67,9 +67,9 @@ class WorkoutCreate extends React.PureComponent {
       postFetch({
         url: '/api/workout',
         body: { name },
-        success: ({ created, ...workout }) => {
-          if (workout.id) {
-            addToWorkouts({ ...workout, created: new Date(created) });
+        success: (workout) => {
+          if (workout) {
+            addToWorkouts(workout);
             setCreating(false);
             this.setState({
               name: ''

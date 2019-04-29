@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Col, Row, Card, ButtonGroup, Button, OverlayTrigger, Popover } from 'react-bootstrap';
-import { removeWorkouts, setCurrentWorkout } from 'state/actions';
+import { Col, Row, Card, ButtonToolbar, Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { removeWorkouts, setEditingWorkoutId } from 'state/actions';
 import { deleteFetch } from 'api';
 import styles from 'assets/css/app.scss';
 
@@ -14,7 +14,7 @@ const mapStateToProps = ({ user: { id: userId }, workouts: { workouts } }, { id 
 
 const mapDispatchToProps = dispatch => (
   {
-    setCurrent: id => dispatch(setCurrentWorkout(id)),
+    setEditingId: id => dispatch(setEditingWorkoutId(id)),
     removeFromWorkouts: workouts => dispatch(removeWorkouts(workouts))
   }
 );
@@ -26,21 +26,13 @@ const WorkoutCard = (props) => {
     name,
     created,
     lastCompleted,
-    setCurrent,
+    setEditingId,
     removeFromWorkouts
   } = props;
 
-  // Set up a ref for the delete confirmation overlay
-  const deleteRef = React.createRef();
-  const handleHideDelete = () => (
-    deleteRef.current.hide()
-  );
-
-  const handleEditClick = () => setCurrent(id);
+  const handleEditClick = () => setEditingId(id);
 
   const handleConfirmDelete = () => {
-    deleteRef.current.hide();
-
     if (userId) {
       deleteFetch({
         url: '/api/workout',
@@ -76,37 +68,28 @@ const WorkoutCard = (props) => {
         </Row>
       </Card.Body>
       <Card.Footer>
-        <div className="d-flex flex-column">
-          <ButtonGroup>
-            <Button
-              variant="outline-primary"
-              onClick={handleEditClick}
+        <ButtonToolbar className="justify-content-end">
+          <Button
+            variant="outline-primary"
+            onClick={handleEditClick}
+          >
+            {'Edit'}
+          </Button>
+          <DropdownButton
+            className={`${styles.noCaretDropdown} ml-2`}
+            variant="outline-danger"
+            title="Delete"
+            drop="up"
+          >
+            <Dropdown.Header>Are you sure?</Dropdown.Header>
+            <Dropdown.Item
+              eventKey={1}
+              onClick={handleConfirmDelete}
             >
-              {'Edit'}
-            </Button>
-            <OverlayTrigger
-              ref={deleteRef}
-              trigger="click"
-              overlay={(
-                <Popover title="Are you sure?">
-                  <ButtonGroup>
-                    <Button onClick={handleHideDelete}>Cancel</Button>
-                    <Button
-                      variant="danger"
-                      onClick={handleConfirmDelete}
-                    >
-                      {'DELETE'}
-                    </Button>
-                  </ButtonGroup>
-                </Popover>
-              )}
-            >
-              <Button variant="outline-danger">
-                {'Delete'}
-              </Button>
-            </OverlayTrigger>
-          </ButtonGroup>
-        </div>
+              {'Yes'}
+            </Dropdown.Item>
+          </DropdownButton>
+        </ButtonToolbar>
       </Card.Footer>
     </Card>
   );
@@ -120,7 +103,7 @@ WorkoutCard.propTypes = {
   name: PropTypes.string.isRequired,
   created: PropTypes.instanceOf(Date).isRequired,
   lastCompleted: PropTypes.instanceOf(Date),
-  setCurrent: PropTypes.func.isRequired,
+  setEditingId: PropTypes.func.isRequired,
   removeFromWorkouts: PropTypes.func.isRequired
 };
 

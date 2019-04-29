@@ -2,22 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, Alert } from 'react-bootstrap';
-import { setCurrentWorkout } from 'state/actions';
+import { setEditingWorkoutId } from 'state/actions';
 import lazyLoad from '../../../UI/lazyLoad';
 
 
-const mapStateToProps = ({ user: { id: userId }, workouts: { currentWorkout } }) => (
-  { userId, ...currentWorkout }
-);
+const mapStateToProps = ({
+  user: { id: userId },
+  workouts: { workouts, editingWorkoutId: id }
+}) => {
+  const thisWorkout = workouts.find(workout => workout.id === id);
+  return { userId, ...thisWorkout };
+};
 
 const mapDispatchToProps = dispatch => (
   {
-    unsetCurrent: () => dispatch(setCurrentWorkout())
+    unsetEditingId: () => dispatch(setEditingWorkoutId())
   }
 );
 
 const WorkoutEditorModal = (props) => {
-  const { userId, unsetCurrent, id, name } = props;
+  const { userId, unsetEditingId, id, name } = props;
   const [workoutEditor, setWorkoutEditor] = useState(null);
   useEffect(() => {
     if (id) {
@@ -36,7 +40,7 @@ const WorkoutEditorModal = (props) => {
   // Make sure to remove the workout editor before unsetting the editing workout id
   const handleOnHide = () => {
     setWorkoutEditor(null);
-    unsetCurrent();
+    unsetEditingId();
   };
 
   return (
@@ -59,7 +63,7 @@ WorkoutEditorModal.propTypes = {
   userId: PropTypes.number,
   id: PropTypes.number,
   name: PropTypes.string,
-  unsetCurrent: PropTypes.func.isRequired
+  unsetEditingId: PropTypes.func.isRequired
 };
 
 WorkoutEditorModal.defaultProps = {

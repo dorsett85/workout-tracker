@@ -12,3 +12,10 @@
   opacity: 0;
   animation: fadeIn 0.75s forwards;
 }
+
+// Remove caret from downdown toggles
+.noCaretDropdown {
+  :global .dropdown-toggle::after {
+    display: none !important;
+  }
+};

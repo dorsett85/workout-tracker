@@ -7,7 +7,7 @@ const getWorkout = async (req, res) => {
   // Return query based on type parameter
   if (type === 'all') {
     const { rows } = await knex.raw(`
-      SELECT id, name, created, last_completed AS lastCompleted 
+      SELECT id, name, created, last_completed AS lastcompleted 
       FROM workouts
       WHERE user_id = ?
       ORDER BY created DESC 
@@ -17,17 +17,16 @@ const getWorkout = async (req, res) => {
   if (type === 'results') {
     const { rows } = await knex.raw(`
       SELECT 
-          ex.workout_id AS wid,
           ex.id AS exid,
-          ex."name" AS exname,
+          ex."name" AS name,
           ex.notes AS exnotes,
-          ex.units AS exunits,
+          ex.units AS units,
           wd.id AS wdid,
-          wd.date AS wddate,
+          wd.date AS date,
           wd.notes AS wdnotes,
-          wd.completed AS wdcompleted,
+          wd.completed AS completed,
           wr.id AS wrid,
-          wr."value" AS wrvalue,
+          wr."value" AS value,
           wr.notes AS wrnotes
       FROM workout_results wr
           INNER JOIN workout_dates wd

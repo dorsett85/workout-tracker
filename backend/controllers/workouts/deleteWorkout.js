@@ -1,12 +1,11 @@
 const knex = require('../../db/db');
 
 
-const deleteWorkout = async (req, res) => {
-  const { body: { id } } = req;
-
-  // Delete the requested document and send back the id
-  await knex.raw('delete from workouts where id = ?', id);
+module.exports = async function deleteWorkout(req, res) {
+  const { user: { id: userId }, body: { id } } = req;
+  await knex.raw(`
+    DELETE FROM workouts
+    WHERE id = :id AND user_id = :userId
+  `, { id, userId });
   return res.json({ id });
 };
-
-module.exports = deleteWorkout;

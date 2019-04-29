@@ -31,10 +31,7 @@ const Workout = (props) => {
         getFetch({
           url: '/api/workout/all',
           success: (workouts) => {
-            const workoutsWithDate = workouts.map(({ created, ...workout }) => (
-              { ...workout, created: new Date(created) }
-            ));
-            addToWorkouts(workoutsWithDate);
+            addToWorkouts(workouts);
             setFetching(false);
           }
         });

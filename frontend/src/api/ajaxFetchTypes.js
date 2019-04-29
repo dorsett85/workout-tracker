@@ -43,7 +43,7 @@ const updateFetch = ({ url, options = {}, body, success, error }) => (
   postFetch({
     url,
     options: {
-      method: 'UPDATE',
+      method: 'PUT',
       ...options
     },
     body,
