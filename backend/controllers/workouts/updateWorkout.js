@@ -4,7 +4,7 @@ const knex = require('../../db/db');
 module.exports = async function updateWorkout(req, res) {
   const { user: { id: userId }, body: { lastCompleted } } = req;
 
-  // Update completed
+  // Update last completed
   if (lastCompleted !== undefined) {
     const { wdId } = req.body;
 

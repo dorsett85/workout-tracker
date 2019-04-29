@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Dropdown, DropdownButton, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { setLastCompletedWorkoutDate } from 'state/actions';
 import { updateFetch, deleteFetch } from 'api/';
 import styles from 'assets/css/app.scss';
-import { updateDateCompleted, deleteDate } from './actions';
+import { updateDateCompleted, deleteDate } from '../actions';
 
 
 const mapDispatchToProps = dispatch => (
@@ -43,14 +43,14 @@ const TableCellDate = (props) => {
   return (
     <td>
       <div className="d-flex justify-content-between align-items-center">
-        <span>{date.toLocaleString()}</span>
-        <div>
+        <div className="text-nowrap">{date.toLocaleString()}</div>
+        <div className="text-nowrap">
           <OverlayTrigger
             overlay={<Tooltip>Set as complete/incomplete</Tooltip>}
           >
             <Button
               onClick={handleCompleteToggle}
-              className="mr-2"
+              className="mx-2"
               size="sm"
               variant="outline-success"
               active={completed}
@@ -79,7 +79,7 @@ const TableCellDate = (props) => {
   );
 };
 
-export default connect(null, mapDispatchToProps)(TableCellDate);
+export default connect(null, mapDispatchToProps)(memo(TableCellDate));
 
 TableCellDate.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,

@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, Table } from 'react-bootstrap';
@@ -7,8 +7,8 @@ import { setInitialData } from './actions';
 import { useInitialData } from './hooks';
 import styles from './workoutEditor.scss';
 import LoadingSpinner from '../../../UI/LoadingSpinner';
-import TableCellDate from './TableCellDate';
-import TableCellExercise from './TableCellExercise';
+import TableHeader from './Table/TableHeader';
+import TableBody from './Table/TableBody';
 
 
 const mapStateToProps = ({ workouts: { editingWorkoutId: id } }) => (
@@ -17,35 +17,24 @@ const mapStateToProps = ({ workouts: { editingWorkoutId: id } }) => (
 
 const WorkoutEditor = (props) => {
   const { id } = props;
+  const [loading, setLoading] = useState(true);
   const [workoutData, dispatch] = useReducer(workoutEditorReducer, []);
 
   // Initial call to fetch workout data
-  useInitialData(id, data => dispatch(setInitialData(data)));
+  useInitialData(id, (data) => {
+    setLoading(false);
+    dispatch(setInitialData(data));
+  });
 
-  return !workoutData.length
+  return loading
     ? <LoadingSpinner />
     : (
       <Row>
         <Col>
           <div className={styles.tableContainer}>
             <Table variant="dark" size="sm" striped bordered hover>
-              <thead>
-                <tr>
-                  {Object.keys(workoutData[0]).map(key => (
-                    <th key={key}>{key !== 'date' ? workoutData[0][key].name : key}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {workoutData.map(row => (
-                  <tr key={row.date.wdId}>
-                    {Object.keys(row).map(key => (key === 'date'
-                      ? <TableCellDate key={key} {...row[key]} dispatch={dispatch} />
-                      : <TableCellExercise key={key} {...row[key]} dispatch={dispatch} />
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
+              <TableHeader id={id} workoutData={workoutData} dispatch={dispatch} />
+              <TableBody id={id} workoutData={workoutData} dispatch={dispatch} />
             </Table>
           </div>
         </Col>

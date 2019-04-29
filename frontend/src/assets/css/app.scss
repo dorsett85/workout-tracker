@@ -15,7 +15,7 @@
 
 // Remove caret from downdown toggles
 .noCaretDropdown {
-  :global .dropdown-toggle::after {
+  :global .dropdown-toggle::after, :global .dropdown-toggle::before {
     display: none !important;
   }
 };
