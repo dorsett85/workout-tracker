@@ -5,6 +5,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { changeUser, removeWorkouts, setFetchingWorkouts } from 'state/actions';
 import { postFetch } from 'api';
 import weightliftingImg from 'assets/img/weightlifting.png';
+import githubImg from 'assets/img/github-logo.png';
 import styles from './navHeader.scss';
 
 
@@ -46,8 +47,12 @@ class NavHeader extends React.Component {
     });
   }
 
+  handleGithubClick() {
+    window.open('https://github.com/dorsett85/workout-tracker','_blank');
+  }
+
   render() {
-    const { handleLinkClick, handleLogout } = this;
+    const { handleLinkClick, handleLogout, handleGithubClick } = this;
     const { id, username } = this.props;
     return (
       <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
@@ -58,7 +63,7 @@ class NavHeader extends React.Component {
           <img
             className={styles.navbarImg}
             src={weightliftingImg}
-            width={40}
+            width={32}
             alt="Weight lifting"
           />
           {'Workout Tracker'}
@@ -76,6 +81,9 @@ class NavHeader extends React.Component {
               </>
             )}
             {id && <Nav.Link onClick={handleLogout}>Logout</Nav.Link>}
+            <Nav.Link onClick={handleGithubClick}>
+              <img src={githubImg} alt="Github logo" />
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
