@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { updateFetch } from 'api/';
 import { updateResultValue } from '../actions';
-import styles from '../workoutEditor.scss'
+import styles from '../workoutEditor.scss';
 
 const TableCellResult = (props) => {
   const { wrId, value, dispatch } = props;
