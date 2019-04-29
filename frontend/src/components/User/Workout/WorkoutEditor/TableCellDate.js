@@ -46,7 +46,6 @@ const TableCellDate = (props) => {
         <span>{date.toLocaleString()}</span>
         <div>
           <OverlayTrigger
-            placement="bottom"
             overlay={<Tooltip>Set as complete/incomplete</Tooltip>}
           >
             <Button
