@@ -1,7 +1,7 @@
 const knex = require('../../db/db');
 
 
-const createWorkout = async (req, res) => {
+module.exports = async function createWorkout(req, res) {
   const { user: { id }, body: { name } } = req;
 
   // Create and insert new workout
@@ -20,8 +20,5 @@ const createWorkout = async (req, res) => {
 
   // Return the new workout
   const { rows } = newWorkout;
-  console.log(rows);
   return res.json(rows);
 };
-
-module.exports = createWorkout;

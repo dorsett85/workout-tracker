@@ -21,7 +21,7 @@ const TableHeader = (props) => {
         <TableCellAddDate
           id={id}
           dispatch={dispatch}
-          colSpan={workoutData.length ? workoutData.length - 1 : 1}
+          colSpan={workoutData.length ? Object.keys(workoutData[0]).length : 1}
         />
       </tr>
     </tbody>
