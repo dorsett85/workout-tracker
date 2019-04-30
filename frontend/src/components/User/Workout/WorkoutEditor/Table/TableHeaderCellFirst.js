@@ -14,7 +14,7 @@ const TableHeaderCellFirst = (props) => {
         <span>{title}</span>
         <OverlayTrigger
           overlay={<Tooltip>Add an exercise</Tooltip>}
-          placement={title === 'No Data!' ? 'left' : 'right'}
+          placement="left"
         >
           <Dropdown className={styles.noCaretDropdown}>
             <Dropdown.Toggle
