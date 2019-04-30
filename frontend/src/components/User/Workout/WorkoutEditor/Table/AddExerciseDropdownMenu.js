@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { postFetch } from 'api/';
+import styles from '../workoutEditor.scss';
 import { convertQueryData } from '../functions';
 import { addExercise } from '../actions';
 
@@ -34,7 +35,7 @@ const AddExerciseDropdownMenu = React.forwardRef((props, _) => {
   };
 
   return (
-    <Form className={`${className} px-2`} onSubmit={handleSubmit}>
+    <Form className={`${className} px-2 ${styles.addExerciseForm}`} onSubmit={handleSubmit}>
       <InputGroup>
         <Form.Control
           autoFocus
