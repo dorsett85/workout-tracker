@@ -6,7 +6,6 @@ import { addWorkouts, setFetchingWorkouts, removeWorkouts } from 'state/actions'
 import { getFetch } from 'api';
 import WorkoutCreate from './WorkoutCreate';
 import WorkoutList from './WorkoutList';
-import WorkoutEditorModal from './WorkoutEditor/WorkoutEditorModal';
 
 
 const mapStateToProps = ({
@@ -39,9 +38,6 @@ const Workout = (props) => {
         setFetching(false);
       }
     }
-
-    // Reset fetching to true on unmount
-    return () => setFetching(true);
   }, []);
 
   return (
@@ -50,7 +46,6 @@ const Workout = (props) => {
         <WorkoutCreate />
         <hr />
         <WorkoutList />
-        <WorkoutEditorModal />
       </Col>
     </Row>
   );

@@ -40,8 +40,8 @@ class NavHeader extends React.Component {
     postFetch({
       url: '/api/logout',
       success: (user) => {
-        resetWorkouts();
         setFetching(true);
+        resetWorkouts();
         changeToGuest(user);
       }
     });

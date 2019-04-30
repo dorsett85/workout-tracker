@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { memo, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, Table } from 'react-bootstrap';
@@ -42,7 +42,7 @@ const WorkoutEditor = (props) => {
     );
 };
 
-export default connect(mapStateToProps)(WorkoutEditor);
+export default connect(mapStateToProps)(memo(WorkoutEditor));
 
 WorkoutEditor.propTypes = {
   id: PropTypes.number.isRequired

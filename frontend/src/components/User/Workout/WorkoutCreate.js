@@ -83,11 +83,11 @@ class WorkoutCreate extends React.PureComponent {
         }
       });
     } else {
-      addToWorkouts({
+      addToWorkouts([{
         id: Math.random(),
         name,
         created: new Date()
-      });
+      }]);
       setCreating(false);
       this.setState({
         name: ''

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setAppLoaded, changeUser } from 'state/actions';
@@ -17,14 +17,12 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-class AppLoad extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getUser();
-  }
+const AppLoad = (props) => {
+  const {
+    checkInUser, setAppIsLoaded, appLoaded, children
+  } = props;
 
-  getUser() {
-    const { setAppIsLoaded, checkInUser } = this.props;
+  useEffect(() => {
     getFetch({
       url: '/api/initialLoad',
       success: (user) => {
@@ -36,17 +34,14 @@ class AppLoad extends React.Component {
         setAppIsLoaded(true);
       }
     });
-  }
+  }, []);
 
-  render() {
-    const { appLoaded, children } = this.props;
-    return (
-      appLoaded
-        ? children
-        : <LoadingSpinner className="mt-3" />
-    );
-  }
-}
+  return (
+    appLoaded
+      ? children
+      : <LoadingSpinner className="mt-3" />
+  );
+};
 
 export default connect(mapStatetoProps, mapDispatchToProps)(AppLoad);
 

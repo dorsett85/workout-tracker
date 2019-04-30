@@ -1,6 +1,5 @@
 export const APP_LOADED = 'APP_LOADED';
 export const CHANGE_USER = 'CHANGE_USER';
-export const LOADING_USER = 'LOADING_USER';
 
 export const SET_CREATING_WORKOUT = 'SET_CREATING_WORKOUT';
 export const SET_EDITING_WORKOUT_ID = 'SET_EDITING_WORKOUT_ID';
@@ -11,52 +10,36 @@ export const REMOVE_WORKOUTS = 'REMOVE_WORKOUTS';
 
 
 // App actions
-const setAppLoaded = payload => (
+export const setAppLoaded = payload => (
   { type: APP_LOADED, payload }
 );
 
 // User actions
-const changeUser = payload => (
+export const changeUser = payload => (
   { type: CHANGE_USER, payload }
 );
 
-const loadingUser = payload => (
-  { type: LOADING_USER, payload }
-);
-
 // Workout actions
-const setCreatingWorkout = payload => (
+export const setCreatingWorkout = payload => (
   { type: SET_CREATING_WORKOUT, payload }
 );
 
-const setEditingWorkoutId = payload => (
+export const setEditingWorkoutId = payload => (
   { type: SET_EDITING_WORKOUT_ID, payload }
 );
 
-const setFetchingWorkouts = payload => (
+export const setFetchingWorkouts = payload => (
   { type: SET_FETCHING_WORKOUTS, payload }
 );
 
-const setLastCompletedWorkoutDate = payload => (
+export const setLastCompletedWorkoutDate = payload => (
   { type: SET_LAST_COMPLETED_WORKOUT_DATE, payload }
 );
 
-const addWorkouts = payload => (
+export const addWorkouts = payload => (
   { type: ADD_WORKOUTS, payload }
 );
 
-const removeWorkouts = payload => (
+export const removeWorkouts = payload => (
   { type: REMOVE_WORKOUTS, payload }
 );
-
-export {
-  setAppLoaded,
-  changeUser,
-  loadingUser,
-  setCreatingWorkout,
-  setEditingWorkoutId,
-  setFetchingWorkouts,
-  setLastCompletedWorkoutDate,
-  addWorkouts,
-  removeWorkouts,
-};
