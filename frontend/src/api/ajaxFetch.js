@@ -28,19 +28,29 @@ const ajaxFetch = ({ url, options = {}, success, error = console.error }) => (
       'X-Requested-With': 'XMLHttpRequest'
     }
   })
+    /**
+     * Check the status of the server response
+     */
     .then((res) => {
       if (!res.ok) { throw res; }
       return res.json();
     })
-    .then(success)
+    /**
+     * Handle server response that is "ok" and converte to json
+     */
+    .then((res) => {
+      try {
+        success(res);
+      } catch (err) {
+        console.error(err);
+      }
+    })
+    /**
+     * Handle server response that is NOT "ok".  This will also catch responses that
+     * are "ok" but can't be converted to json
+     */
     .catch((err) => {
       const { status, statusText } = err;
-
-      /**
-       * First check if the error comes from the success function (e.g., it won't have a status text).
-       * We simply post these to the console as usual
-       */
-      if (!statusText) { return console.error(err); }
 
       /**
        * Try converting the error object to json for the error callback, if it fails (e.g., it's

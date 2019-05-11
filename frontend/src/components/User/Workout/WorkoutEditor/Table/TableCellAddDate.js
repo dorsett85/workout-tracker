@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { postFetch } from 'api/';
 import { addDate } from '../actions';
 import { convertQueryData } from '../functions';
@@ -19,18 +19,13 @@ const TableCellAddDate = (props) => {
 
   return (
     <td colSpan={colSpan}>
-      <OverlayTrigger
-        overlay={<Tooltip>Add a workout row</Tooltip>}
-        placement="right"
+      <Button
+        onClick={handleAddDate}
+        size="sm"
+        variant="outline-light"
       >
-        <Button
-          onClick={handleAddDate}
-          size="sm"
-          variant="outline-light"
-        >
-          {'Add +'}
-        </Button>
-      </OverlayTrigger>
+        {'Add date'}
+      </Button>
     </td>
   );
 };

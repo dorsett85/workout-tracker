@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { updateFetch } from 'api/';
@@ -6,56 +6,54 @@ import { updateResultValue } from '../actions';
 
 const TableCellResult = (props) => {
   const { wrId, value, dispatch } = props;
-  const [wrValue, setWrValue] = useState(value);
+  const [cellValue, setCellValue] = useState(value);
+  const [editingValue, setEditingValue] = useState(value);
   const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    setWrValue(value);
-  }, [value]);
 
   const updateValue = () => {
     updateFetch({
       url: '/api/workout/results',
-      body: { wrId, wrValue },
+      body: { wrId, wrValue: editingValue },
       success: (data) => {
-        setWrValue('');
+        setCellValue(data.wrValue);
+        setEditing(false);
         dispatch(updateResultValue(data));
       }
     });
   };
 
-  const handleOpenEdit = () => setEditing(true);
+  const handleOpenEdit = show => (e) => {
+    const { nodeName, type } = e.target;
+    e.stopPropagation();
 
-  const handleBlur = (e) => {
-    if (e.relatedTarget.id === `${wrId}-UpdateButton`) { updateValue(); }
-    setEditing(false);
+    // Cancel the toggle if it's a submit click, this will happen in the update function
+    // Otherwise toggle editing mode
+    if (nodeName === 'BUTTON' && type === 'submit') { return; }
+    if (show !== editing) { setEditing(show); }
   };
 
-  const handleChange = e => setWrValue(e.target.value);
+  const handleChange = e => setEditingValue(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     updateValue();
-    setEditing(false);
   };
 
   return (
-    <td onClick={handleOpenEdit} role="presentation">
+    <td onClick={handleOpenEdit(true)} role="presentation">
       {!editing
-        ? value
+        ? cellValue
         : (
           <Form onSubmit={handleSubmit}>
             <InputGroup>
               <Form.Control
                 autoFocus
                 size="sm"
-                value={wrValue}
+                value={editingValue}
                 onChange={handleChange}
-                onBlur={handleBlur}
               />
               <InputGroup.Append>
                 <Button
-                  id={`${wrId}-UpdateButton`}
                   type="submit"
                   variant="success"
                   size="sm"
@@ -65,6 +63,7 @@ const TableCellResult = (props) => {
                 <Button
                   variant="secondary"
                   size="sm"
+                  onClick={handleOpenEdit(false)}
                 >
                   {'X'}
                 </Button>
