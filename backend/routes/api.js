@@ -17,6 +17,7 @@ const updateWorkoutDate = require('../controllers/workouts/updateWorkoutDate');
 const deleteWorkoutDate = require('../controllers/workouts/deleteWorkoutDate');
 
 const createWorkoutExercise = require('../controllers/workouts/createWorkoutExercise');
+const updateWorkoutExercise = require('../controllers/workouts/updateWorkoutExercise');
 const deleteWorkoutExercise = require('../controllers/workouts/deleteWorkoutExercise');
 
 const updateWorkoutResult = require('../controllers/workouts/updateWorkoutResult');
@@ -43,6 +44,7 @@ router.delete('/workout/date', asyncErrorHandler(deleteWorkoutDate));
 
 // Workout exercise routes
 router.post('/workout/exercise', asyncErrorHandler(createWorkoutExercise));
+router.put('/workout/exercise', asyncErrorHandler(updateWorkoutExercise));
 router.delete('/workout/exercise', asyncErrorHandler(deleteWorkoutExercise));
 
 // Workouts results routes

@@ -51,7 +51,6 @@ const AddExerciseDropdownMenu = React.forwardRef((props, _) => {
               type="submit"
               variant="outline-success"
               size="sm"
-              onClick={handleSubmit}
             >
               {'✓'}
             </Button>

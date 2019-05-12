@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
 import styles from 'assets/css/app.scss';
-import EditExerciseDropdownMenu from './EditExerciseDropdown';
+import EditExerciseDropdownMenu from './EditExerciseDropdownMenu';
 
 
 const TableHeaderCellExercise = (props) => {
@@ -26,6 +26,7 @@ const TableHeaderCellExercise = (props) => {
             as={EditExerciseDropdownMenu}
             id={id}
             exId={exId}
+            title={title}
             dispatch={dispatch}
           />
         </Dropdown>
