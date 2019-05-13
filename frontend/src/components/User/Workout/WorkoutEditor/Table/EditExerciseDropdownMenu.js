@@ -20,6 +20,14 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
   const [updatedExNotes, setUpdatedExNotes] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
+  // Create effect for when the dropdown is shown or not
+  useEffect(() => {
+    if (!show) {
+      setUpdatedExNotes(false);
+      setConfirmDelete(false);
+    }
+  }, [show]);
+
   const handleClose = () => close();
 
   const handleRename = (e) => {
