@@ -14,7 +14,7 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
   const { id, exId, title, exNotes, className, dispatch, show, close } = props;
   const [exName, setExName] = useState('');
   const [isInvalidExName, setIsInvalidExName] = useState(false);
-  const [newExNotes, setNewExNotes] = useState(exNotes || '');
+  const [newExNotes, setNewExNotes] = useState(exNotes);
   const [updatingExNotes, setUpdatingExNotes] = useState(false);
   const [updateExNotes, setUpdateExNotes] = useState(false);
   const [updatedExNotes, setUpdatedExNotes] = useState(false);
@@ -110,8 +110,8 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
             placeholder="Rename..."
             value={exName}
           />
-          <InputGroup.Append>
-            {exName && (
+          {exName && (
+            <InputGroup.Append>
               <Button
                 type="submit"
                 variant="outline-success"
@@ -119,15 +119,15 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
               >
                 {'✓'}
               </Button>
-            )}
-          </InputGroup.Append>
+            </InputGroup.Append>
+          )}
           <Form.Control.Feedback type="invalid">
             {'Enter unique name'}
           </Form.Control.Feedback>
         </InputGroup>
       </Form>
       <FormInput
-        isValid={updatedExNotes ? true : null}
+        isValid={updatedExNotes || null}
         onChange={handleUpdateNotes}
         label={`Notes${updatingExNotes ? '...' : ''}`}
         size="sm"

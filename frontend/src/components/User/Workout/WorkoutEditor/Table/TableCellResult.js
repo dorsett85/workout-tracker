@@ -1,75 +1,94 @@
-import React, { memo, useState } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputGroup, Button } from 'react-bootstrap';
+import { Form, InputGroup, Spinner, Button } from 'react-bootstrap';
 import { updateFetch } from 'api/';
+import debounce from 'assets/js/functions/debounce';
 import { updateResultValue } from '../actions';
+
 
 const TableCellResult = (props) => {
   const { wrId, value, dispatch } = props;
-  const [cellValue, setCellValue] = useState(value);
-  const [editingValue, setEditingValue] = useState(value);
+  const [wrValue, setWrValue] = useState(value);
   const [editing, setEditing] = useState(false);
+  const [updatingWrValue, setUpdatingWrValue] = useState(false);
+  const [updateWrValue, setUpdateWrValue] = useState(false);
+  const [updatedWrValue, setUpdatedWrValue] = useState(false);
 
-  const updateValue = () => {
-    updateFetch({
-      url: '/api/workout/results',
-      body: { wrId, wrValue: editingValue },
-      success: (data) => {
-        setCellValue(data.wrValue);
-        setEditing(false);
-        dispatch(updateResultValue(data));
-      }
-    });
+  const cellRef = useRef(null);
+  const inputDivRef = useRef(null);
+
+  // Create effect for initial sizing of the form control based on the td size
+  useEffect(() => {
+    if (editing) {
+      const { clientWidth: cellWidth } = cellRef.current;
+      inputDivRef.current.style.width = `${cellWidth - 10}px`;
+    }
+  }, [editing]);
+
+  const handleEditing = show => () => {
+    setEditing(show);
+    if (!show) { setUpdatedWrValue(false); }
   };
 
-  const handleOpenEdit = show => (e) => {
-    const { nodeName, type } = e.target;
-    e.stopPropagation();
-
-    // Cancel the toggle if it's a submit click, this will happen in the update function
-    // Otherwise toggle editing mode
-    if (nodeName === 'BUTTON' && type === 'submit') { return; }
-    if (show !== editing) { setEditing(show); }
+  // Handler for value change, use debounce to only update after a timeout
+  const handleChange = (e) => {
+    setWrValue(e.target.value);
+    setUpdatingWrValue(true);
+    setUpdateWrValue(false);
+    setUpdatedWrValue(false);
+    debounce(() => setUpdateWrValue(true), 500);
   };
 
-  const handleChange = e => setEditingValue(e.target.value);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateValue();
-  };
+  // Create an effect for when the value is ready to update
+  useEffect(() => {
+    if (updateWrValue) {
+      updateFetch({
+        url: '/api/workout/results',
+        body: { wrId, wrValue },
+        success: (data) => {
+          dispatch(updateResultValue(data));
+          setUpdatingWrValue(false);
+          setUpdatedWrValue(true);
+        }
+      });
+    }
+  }, [updateWrValue]);
 
   return (
-    <td onClick={handleOpenEdit(true)} role="presentation">
+    <td ref={cellRef} onClick={handleEditing(true)} role="presentation">
       {!editing
-        ? cellValue
+        ? wrValue
         : (
-          <Form onSubmit={handleSubmit}>
+          <div ref={inputDivRef} className="position-absolute">
             <InputGroup>
               <Form.Control
                 autoFocus
-                size="sm"
-                value={editingValue}
+                isValid={updatedWrValue || null}
                 onChange={handleChange}
+                onBlur={handleEditing(false)}
+                size="sm"
+                placeholder="Enter a value..."
+                value={wrValue}
               />
-              <InputGroup.Append>
-                <Button
-                  type="submit"
-                  variant="success"
-                  size="sm"
-                >
-                  {'✓'}
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleOpenEdit(false)}
-                >
-                  {'X'}
-                </Button>
-              </InputGroup.Append>
+              {updatingWrValue && (
+                <InputGroup.Append>
+                  <InputGroup.Text>
+                    <Spinner animation="border" size="sm" />
+                  </InputGroup.Text>
+                </InputGroup.Append>
+              )}
+              {updatedWrValue && (
+                <InputGroup.Append>
+                  <Button
+                    variant="light"
+                    size="sm"
+                  >
+                    {'x'}
+                  </Button>
+                </InputGroup.Append>
+              )}
             </InputGroup>
-          </Form>
+          </div>
         )
       }
     </td>
