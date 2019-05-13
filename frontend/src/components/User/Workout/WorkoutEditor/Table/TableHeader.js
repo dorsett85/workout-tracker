@@ -24,6 +24,7 @@ const TableHeader = (props) => {
                 key={key}
                 id={id}
                 title={workoutData[0][key].name}
+                exNotes={workoutData[0][key].exNotes}
                 dispatch={dispatch}
                 {...workoutData[0][key]}
               />

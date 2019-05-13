@@ -2,10 +2,10 @@ const knex = require('../../db/db');
 
 
 module.exports = async function updateWorkoutResult(req, res) {
-  const { user: { id: userId }, body: { wrId, wrValue } } = req;
+  const { user: { id: userId }, body: { exId, exName } } = req;
 
   // Update value
-  if (wrValue !== undefined) {
+  if (exName !== undefined) {
     const { rows: [{ exercise_id: exId }] } = await knex.raw(`
       UPDATE workout_results SET value = :wrValue
       WHERE id = :wrId

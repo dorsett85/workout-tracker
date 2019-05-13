@@ -6,7 +6,7 @@ import EditExerciseDropdownMenu from './EditExerciseDropdownMenu';
 
 
 const TableHeaderCellExercise = (props) => {
-  const { id, exId, title, dispatch } = props;
+  const { id, exId, title, exNotes, dispatch } = props;
 
   return (
     <th>
@@ -27,6 +27,7 @@ const TableHeaderCellExercise = (props) => {
             id={id}
             exId={exId}
             title={title}
+            exNotes={exNotes}
             dispatch={dispatch}
           />
         </Dropdown>
@@ -41,5 +42,10 @@ TableHeaderCellExercise.propTypes = {
   id: PropTypes.number.isRequired,
   exId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  exNotes: PropTypes.string,
   dispatch: PropTypes.func.isRequired
+};
+
+TableHeaderCellExercise.defaultProps = {
+  exNotes: undefined
 };
