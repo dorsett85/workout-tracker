@@ -83,7 +83,7 @@ const TableCellResult = (props) => {
                   </InputGroup.Text>
                 </InputGroup.Append>
               )}
-              {updatedWrValue && (
+              {!updatingWrValue && (
                 <InputGroup.Append>
                   <Button
                     variant="light"
