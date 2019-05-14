@@ -45,20 +45,22 @@ const AddExerciseDropdownMenu = React.forwardRef((props, _) => {
           onChange={handleChange}
           value={name}
         />
-        <InputGroup.Append>
-          {name && (
-            <Button
-              type="submit"
-              variant="outline-success"
-              size="sm"
-            >
-              {'✓'}
-            </Button>
-          )}
-        </InputGroup.Append>
-        <Form.Control.Feedback type="invalid">
-          {'Enter unique name'}
-        </Form.Control.Feedback>
+        {name && (
+          <>
+            <InputGroup.Append>
+              <Button
+                type="submit"
+                variant="outline-success"
+                size="sm"
+              >
+                {'✓'}
+              </Button>
+            </InputGroup.Append>
+            <Form.Control.Feedback type="invalid">
+              {'Enter unique name'}
+            </Form.Control.Feedback>
+          </>
+        )}
       </InputGroup>
     </Form>
   );

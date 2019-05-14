@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Navbar, Nav } from 'react-bootstrap';
-import { changeUser, removeWorkouts, setFetchingWorkouts } from 'state/actions';
+import { changeUser, deleteWorkout, setFetchingWorkouts } from 'state/actions';
 import { postFetch } from 'api';
 import weightliftingImg from 'assets/img/weightlifting.png';
 import githubImg from 'assets/img/github-logo.png';
@@ -16,7 +16,7 @@ const mapStateToProps = ({ user: { id, username } }) => (
 const mapDispatchToProps = dispatch => (
   {
     changeToGuest: user => dispatch(changeUser(user)),
-    resetWorkouts: () => dispatch(removeWorkouts()),
+    resetWorkouts: () => dispatch(deleteWorkout()),
     setFetching: bool => dispatch(setFetchingWorkouts(bool))
   }
 );

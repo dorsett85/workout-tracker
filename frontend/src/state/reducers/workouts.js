@@ -4,7 +4,9 @@ import {
   SET_FETCHING_WORKOUTS,
   SET_LAST_COMPLETED_WORKOUT_DATE,
   ADD_WORKOUTS,
-  REMOVE_WORKOUTS
+  UPDATE_WORKOUT_NAME,
+  UPDATE_WORKOUT_NOTES,
+  DELETE_WORKOUT
 } from '../actions';
 
 
@@ -51,7 +53,31 @@ const workouts = (state = initialState, { type, payload }) => {
     return { ...state, workouts: [...workoutsWithDate, ...state.workouts] };
   }
 
-  if (type === REMOVE_WORKOUTS) {
+  if (type === UPDATE_WORKOUT_NAME) {
+    const { id, workoutName } = payload;
+    const updatedWorkouts = state.workouts.map((workout) => {
+      if (workout.id === id) {
+        const newWorkout = workout;
+        newWorkout.name = workoutName;
+      }
+      return workout;
+    });
+    return { ...state, workouts: updatedWorkouts };
+  }
+
+  if (type === UPDATE_WORKOUT_NOTES) {
+    const { id, workoutNotes } = payload;
+    const updatedWorkouts = state.workouts.map((workout) => {
+      if (workout.id === id) {
+        const newWorkout = workout;
+        newWorkout.notes = workoutNotes;
+      }
+      return workout;
+    });
+    return { ...state, workouts: updatedWorkouts };
+  }
+
+  if (type === DELETE_WORKOUT) {
     const newWorkouts = payload
       ? state.workouts.filter(({ id }) => id !== payload)
       : [];

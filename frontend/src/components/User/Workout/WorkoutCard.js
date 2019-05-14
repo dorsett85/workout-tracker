@@ -1,54 +1,71 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Col, Row, Card, ButtonToolbar, Button, DropdownButton, Dropdown } from 'react-bootstrap';
-import { removeWorkouts, setEditingWorkoutId } from 'state/actions';
-import { deleteFetch } from 'api';
+import { Col, Row, Card, Button, Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { setEditingWorkoutId } from 'state/actions';
 import styles from 'assets/css/app.scss';
+import WorkoutCardDropdownMenu from './WorkoutCardDropdownMenu';
 
 
-const mapStateToProps = ({ user: { id: userId }, workouts: { workouts } }, { id }) => {
+const mapStateToProps = ({ workouts: { workouts } }, { id }) => {
   const thisWorkout = workouts.find(workout => workout.id === id);
-  return { userId, ...thisWorkout };
+  return { ...thisWorkout };
 };
 
 const mapDispatchToProps = dispatch => (
-  {
-    setEditingId: id => dispatch(setEditingWorkoutId(id)),
-    removeFromWorkouts: workouts => dispatch(removeWorkouts(workouts))
-  }
+  { setEditingId: id => dispatch(setEditingWorkoutId(id)) }
 );
 
 const WorkoutCard = (props) => {
   const {
-    userId,
     id,
     name,
     created,
     lastCompleted,
-    setEditingId,
-    removeFromWorkouts
+    notes,
+    setEditingId
   } = props;
 
   const handleEditClick = () => setEditingId(id);
 
-  const handleConfirmDelete = () => {
-    if (userId) {
-      deleteFetch({
-        url: '/api/workout',
-        body: { id },
-        success: (workout) => {
-          removeFromWorkouts(workout.id);
-        }
-      });
-    } else {
-      removeFromWorkouts(id);
-    }
-  };
-
   return (
     <Card border="dark" className={styles.fadeIn}>
-      <Card.Header bg="primary"><b>{name}</b></Card.Header>
+      <Card.Header bg="primary">
+        <div className="d-flex justify-content-between align-items-center">
+          <span>
+            <b>{name}</b>
+            {notes && (
+              <OverlayTrigger
+                overlay={(
+                  <Tooltip>
+                    {notes}
+                  </Tooltip>
+                )}
+              >
+                <span>
+                  &nbsp;
+                  <sup className={styles.cursorPointer}>ⓘ</sup>
+                </span>
+              </OverlayTrigger>
+            )}
+          </span>
+          <Dropdown
+            className={styles.noCaretDropdown}
+            drop="left"
+          >
+            <Dropdown.Toggle
+              size="sm"
+              variant="outline-dark"
+            >
+              {'⋮'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu
+              as={WorkoutCardDropdownMenu}
+              id={id}
+            />
+          </Dropdown>
+        </div>
+      </Card.Header>
       <Card.Body>
         <Row>
           <Col xl={6}>
@@ -68,28 +85,13 @@ const WorkoutCard = (props) => {
         </Row>
       </Card.Body>
       <Card.Footer>
-        <ButtonToolbar className="justify-content-end">
-          <Button
-            variant="outline-primary"
-            onClick={handleEditClick}
-          >
-            {'Edit'}
-          </Button>
-          <DropdownButton
-            className={`${styles.noCaretDropdown} ml-2`}
-            variant="outline-danger"
-            title="Delete"
-            drop="up"
-          >
-            <Dropdown.Header>Are you sure?</Dropdown.Header>
-            <Dropdown.Item
-              eventKey={1}
-              onClick={handleConfirmDelete}
-            >
-              {'Yes'}
-            </Dropdown.Item>
-          </DropdownButton>
-        </ButtonToolbar>
+        <Button
+          variant="primary"
+          onClick={handleEditClick}
+          block
+        >
+          {'Edit'}
+        </Button>
       </Card.Footer>
     </Card>
   );
@@ -98,16 +100,15 @@ const WorkoutCard = (props) => {
 export default connect(mapStateToProps, mapDispatchToProps)(memo(WorkoutCard));
 
 WorkoutCard.propTypes = {
-  userId: PropTypes.number,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   created: PropTypes.instanceOf(Date).isRequired,
   lastCompleted: PropTypes.instanceOf(Date),
-  setEditingId: PropTypes.func.isRequired,
-  removeFromWorkouts: PropTypes.func.isRequired
+  notes: PropTypes.string,
+  setEditingId: PropTypes.func.isRequired
 };
 
 WorkoutCard.defaultProps = {
-  userId: undefined,
-  lastCompleted: undefined
+  lastCompleted: undefined,
+  notes: undefined
 };

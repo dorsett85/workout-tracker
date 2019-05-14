@@ -55,7 +55,12 @@ const TableCellResult = (props) => {
   }, [updateWrValue]);
 
   return (
-    <td ref={cellRef} onClick={handleEditing(true)} role="presentation">
+    <td
+      ref={cellRef}
+      onClick={handleEditing(true)}
+      className="position-relative"
+      role="presentation"
+    >
       {!editing
         ? wrValue
         : (

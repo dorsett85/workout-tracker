@@ -14,7 +14,7 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
   const { id, exId, title, exNotes, className, dispatch, show, close } = props;
   const [exName, setExName] = useState('');
   const [isInvalidExName, setIsInvalidExName] = useState(false);
-  const [newExNotes, setNewExNotes] = useState(exNotes);
+  const [newExNotes, setNewExNotes] = useState(exNotes || '');
   const [updatingExNotes, setUpdatingExNotes] = useState(false);
   const [updateExNotes, setUpdateExNotes] = useState(false);
   const [updatedExNotes, setUpdatedExNotes] = useState(false);
@@ -23,6 +23,7 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
   // Create effect for when the dropdown is shown or not
   useEffect(() => {
     if (!show) {
+      setExName('');
       setUpdatedExNotes(false);
       setConfirmDelete(false);
     }
@@ -37,6 +38,7 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
 
   const handleSubmitExName = (e) => {
     e.preventDefault();
+    if (!exName) { return; }
     updateFetch({
       url: '/api/workout/exercise',
       body: { exId, exName },
@@ -50,7 +52,6 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
       }
     });
   };
-
 
   // Handler for notes change, use debounce to only update after a timeout
   const handleUpdateNotes = (e) => {
@@ -111,19 +112,21 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
             value={exName}
           />
           {exName && (
-            <InputGroup.Append>
-              <Button
-                type="submit"
-                variant="outline-success"
-                size="sm"
-              >
-                {'✓'}
-              </Button>
-            </InputGroup.Append>
+            <>
+              <InputGroup.Append>
+                <Button
+                  type="submit"
+                  variant="outline-success"
+                  size="sm"
+                >
+                  {'✓'}
+                </Button>
+              </InputGroup.Append>
+              <Form.Control.Feedback type="invalid">
+                {'Enter unique name'}
+              </Form.Control.Feedback>
+            </>
           )}
-          <Form.Control.Feedback type="invalid">
-            {'Enter unique name'}
-          </Form.Control.Feedback>
         </InputGroup>
       </Form>
       <FormInput
