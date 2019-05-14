@@ -1,10 +1,18 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Spinner } from 'react-bootstrap';
 
 
-const FormInput = ({ id, label, validFeedback, errFeedback, ...props }) => (
+const FormInput = ({ id, label, validFeedback, errFeedback, isUpdating, ...props }) => (
   <Form.Group controlId={id}>
-    <Form.Label>{label}</Form.Label>
+    <Form.Label>
+      {label}
+      {isUpdating && (
+        <>
+          &nbsp;
+          <Spinner animation="border" size="sm" />
+        </>
+      )}
+    </Form.Label>
     <Form.Control {...props} />
     <Form.Control.Feedback type="valid">
       {validFeedback}

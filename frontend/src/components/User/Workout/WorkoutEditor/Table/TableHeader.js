@@ -10,7 +10,7 @@ const TableHeader = (props) => {
     <thead>
       <tr>
         {workoutData[0]
-          ? Object.keys(workoutData[0]).map(key => (key === 'date'
+          ? Object.keys(workoutData[0]).sort().map(key => (key === 'date'
             ? (
               <TableHeaderCellFirst
                 key={key}

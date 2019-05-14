@@ -11,7 +11,7 @@ const TableHeader = (props) => {
     <tbody>
       {workoutData.map(row => (
         <tr key={row.date.wdId}>
-          {Object.keys(row).map(key => (key === 'date'
+          {Object.keys(row).sort().map(key => (key === 'date'
             ? <TableCellDate key={key} dispatch={dispatch} {...row[key]} />
             : <TableCellResult key={key} dispatch={dispatch} {...row[key]} />
           ))}

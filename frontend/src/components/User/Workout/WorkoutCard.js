@@ -35,18 +35,18 @@ const WorkoutCard = (props) => {
           <span>
             <b>{name}</b>
             {notes && (
-              <OverlayTrigger
-                overlay={(
-                  <Tooltip>
-                    {notes}
-                  </Tooltip>
-                )}
-              >
-                <span>
-                  &nbsp;
+              <span>
+                &nbsp;
+                <OverlayTrigger
+                  overlay={(
+                    <Tooltip>
+                      {notes}
+                    </Tooltip>
+                  )}
+                >
                   <sup className={styles.cursorPointer}>ⓘ</sup>
-                </span>
-              </OverlayTrigger>
+                </OverlayTrigger>
+              </span>
             )}
           </span>
           <Dropdown

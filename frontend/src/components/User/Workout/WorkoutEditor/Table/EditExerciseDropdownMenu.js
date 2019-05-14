@@ -97,7 +97,7 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
           variant="outline-dark"
           size="sm"
         >
-          {'x'}
+          &times;
         </Button>
       </div>
       <hr />
@@ -132,7 +132,8 @@ const EditExerciseDropdownMenu = React.forwardRef((props, _) => {
       <FormInput
         isValid={updatedExNotes || null}
         onChange={handleUpdateNotes}
-        label={`Notes${updatingExNotes ? '...' : ''}`}
+        label="Notes"
+        isUpdating={updatingExNotes}
         size="sm"
         as="textarea"
         rows={3}

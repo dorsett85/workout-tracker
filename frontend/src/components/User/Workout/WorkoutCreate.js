@@ -143,7 +143,7 @@ class WorkoutCreate extends React.PureComponent {
                       variant="outline-danger"
                       onClick={handleClose}
                     >
-                      {'X'}
+                      &times;
                     </Button>
                   </InputGroup.Append>
                 </InputGroup>

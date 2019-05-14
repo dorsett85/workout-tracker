@@ -89,7 +89,7 @@ const TableCellResult = (props) => {
                     variant="light"
                     size="sm"
                   >
-                    {'x'}
+                    &times;
                   </Button>
                 </InputGroup.Append>
               )}

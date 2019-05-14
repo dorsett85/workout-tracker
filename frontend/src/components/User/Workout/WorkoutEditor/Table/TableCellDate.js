@@ -62,7 +62,7 @@ const TableCellDate = (props) => {
             className={`${styles.noCaretDropdown} d-inline`}
             variant="outline-danger"
             size="sm"
-            title="X"
+            title="×"
             drop="down"
           >
             <Dropdown.Header>Are you sure?</Dropdown.Header>

@@ -127,7 +127,7 @@ const WorkoutCardDropdownMenu = React.forwardRef((props, _) => {
           variant="outline-dark"
           size="sm"
         >
-          {'x'}
+          &times;
         </Button>
       </div>
       <hr />
@@ -162,7 +162,8 @@ const WorkoutCardDropdownMenu = React.forwardRef((props, _) => {
       <FormInput
         isValid={updatedWorkoutNotes || null}
         onChange={handleUpdateNotes}
-        label={`Notes${updatingWorkoutNotes ? '...' : ''}`}
+        label="Notes"
+        isUpdating={updatingWorkoutNotes}
         size="sm"
         as="textarea"
         rows={3}
