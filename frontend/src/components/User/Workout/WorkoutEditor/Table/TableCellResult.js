@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup, Spinner, Button } from 'react-bootstrap';
 import { updateFetch } from 'api/';
 import debounce from 'assets/js/functions/debounce';
+import styles from 'assets/css/app.scss';
 import { updateResultValue } from '../actions';
 
 
@@ -58,7 +59,7 @@ const TableCellResult = (props) => {
     <td
       ref={cellRef}
       onClick={handleEditing(true)}
-      className="position-relative"
+      className={`position-relative ${styles.cursorPointer}`}
       role="presentation"
     >
       {!editing
