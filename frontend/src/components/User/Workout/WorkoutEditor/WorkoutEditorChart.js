@@ -53,6 +53,13 @@ const createChart = (workoutData) => {
   const { minDate, maxDate } = getDateRange(workoutData);
   const workoutSeries = getWorkoutSeries(workoutData);
 
+  // Remember to not use UTC time
+  Highcharts.setOptions({
+    time: {
+      useUTC: false
+    }
+  });
+
   Highcharts.chart('workoutChartContainer', {
 
     title: {
@@ -77,6 +84,11 @@ const createChart = (workoutData) => {
       layout: 'vertical',
       align: 'right',
       verticalAlign: 'middle'
+    },
+
+    tooltip: {
+      xDateFormat: '%A, %B %d, %l:%M%P',
+      shared: true
     },
 
     plotOptions: {
