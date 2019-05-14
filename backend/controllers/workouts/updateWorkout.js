@@ -2,7 +2,31 @@ const knex = require('../../db/db');
 
 
 module.exports = async function updateWorkout(req, res) {
-  const { user: { id: userId }, body: { lastCompleted } } = req;
+  const { user: { id: userId }, body: { id, workoutName, workoutNotes, lastCompleted } } = req;
+
+  // Update name
+  if (workoutName !== undefined) {
+    try {
+      await knex.raw(`
+        UPDATE workouts SET name = :workoutName
+            WHERE id = :id
+      `, { id, workoutName });
+    } catch (err) {
+      // Error for duplicate name
+      if (err.code === '23505') { return res.json(null); }
+      throw err;
+    }
+    return res.json(id);
+  }
+
+  // Update notes
+  if (workoutNotes !== undefined) {
+    await knex.raw(`
+      UPDATE workouts SET notes = :workoutNotes
+          WHERE id = :id
+    `, { id, workoutNotes });
+    return res.json(id);
+  }
 
   // Update last completed
   if (lastCompleted !== undefined) {

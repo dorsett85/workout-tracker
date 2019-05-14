@@ -7,7 +7,7 @@ const getWorkout = async (req, res) => {
   // Return query based on type parameter
   if (type === 'all') {
     const { rows } = await knex.raw(`
-      SELECT id, name, created, last_completed AS lastcompleted 
+      SELECT id, name, created, last_completed AS lastcompleted, notes
       FROM workouts
       WHERE user_id = ?
       ORDER BY created DESC 

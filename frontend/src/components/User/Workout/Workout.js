@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
-import { addWorkouts, setFetchingWorkouts, removeWorkouts } from 'state/actions';
+import { addWorkouts, setFetchingWorkouts, deleteWorkout } from 'state/actions';
 import { getFetch } from 'api';
 import WorkoutCreate from './WorkoutCreate';
 import WorkoutList from './WorkoutList';
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => (
   {
     setFetching: bool => dispatch(setFetchingWorkouts(bool)),
     addToWorkouts: workouts => dispatch(addWorkouts(workouts)),
-    resetWorkouts: () => dispatch(removeWorkouts()),
+    resetWorkouts: () => dispatch(deleteWorkout()),
   }
 );
 

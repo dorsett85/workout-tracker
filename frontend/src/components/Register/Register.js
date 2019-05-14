@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { changeUser, removeWorkouts, setFetchingWorkouts } from 'state/actions';
+import { changeUser, deleteWorkout, setFetchingWorkouts } from 'state/actions';
 import { postFetch } from 'api';
 import styles from 'assets/css/app.scss';
 import FormInput from '../UI/FormInput';
@@ -13,7 +13,7 @@ const mapDispatchToProps = dispatch => (
   {
     loginUser: user => dispatch(changeUser(user)),
     setFetching: bool => dispatch(setFetchingWorkouts(bool)),
-    resetWorkouts: () => dispatch(removeWorkouts())
+    resetWorkouts: () => dispatch(deleteWorkout())
   }
 );
 
