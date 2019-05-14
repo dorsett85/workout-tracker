@@ -1,7 +1,7 @@
 import React, { memo, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, Table } from 'react-bootstrap';
+import { Row, Col, Tabs, Tab, Table } from 'react-bootstrap';
 import workoutEditorReducer from './reducer';
 import { setInitialData } from './actions';
 import { useInitialData } from './hooks';
@@ -9,6 +9,7 @@ import styles from './workoutEditor.scss';
 import LoadingSpinner from '../../../UI/LoadingSpinner';
 import TableHeader from './Table/TableHeader';
 import TableBody from './Table/TableBody';
+import WorkoutEditorChart from './WorkoutEditorChart';
 
 
 const mapStateToProps = ({ workouts: { editingWorkoutId: id } }) => (
@@ -22,23 +23,34 @@ const WorkoutEditor = (props) => {
 
   // Initial call to fetch workout data
   useInitialData(id, (data) => {
-    setLoading(false);
     dispatch(setInitialData(data));
+    setLoading(false);
   });
 
   return loading
     ? <LoadingSpinner />
     : (
-      <Row>
-        <Col>
-          <div className={styles.tableContainer}>
-            <Table variant="dark" size="sm" striped bordered hover>
-              <TableHeader id={id} workoutData={workoutData} dispatch={dispatch} />
-              <TableBody id={id} workoutData={workoutData} dispatch={dispatch} />
-            </Table>
-          </div>
-        </Col>
-      </Row>
+      <Tabs mountOnEnter unmountOnExit>
+        <Tab eventKey="table" title="Table">
+          <Row className="mt-3">
+            <Col>
+              <div className={styles.tableContainer}>
+                <Table variant="dark" size="sm" striped bordered hover>
+                  <TableHeader id={id} workoutData={workoutData} dispatch={dispatch} />
+                  <TableBody id={id} workoutData={workoutData} dispatch={dispatch} />
+                </Table>
+              </div>
+            </Col>
+          </Row>
+        </Tab>
+        <Tab eventKey="chart" title="Chart">
+          <Row className="mt-3">
+            <Col>
+              <WorkoutEditorChart workoutData={workoutData} />
+            </Col>
+          </Row>
+        </Tab>
+      </Tabs>
     );
 };
 
