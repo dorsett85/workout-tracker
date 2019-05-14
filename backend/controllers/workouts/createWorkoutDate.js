@@ -30,7 +30,8 @@ module.exports = async function createWorkoutDate(req, res) {
             ON wr.date_id = wd.id
         INNER JOIN exercises ex
             ON wr.exercise_id = ex.id
-    WHERE wr.date_id = ?;
+    WHERE wr.date_id = ?
+    ORDER BY date;
   `, wdId);
   return res.json(rows);
 };

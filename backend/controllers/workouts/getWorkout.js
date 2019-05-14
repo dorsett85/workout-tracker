@@ -37,7 +37,8 @@ const getWorkout = async (req, res) => {
           SELECT w.id
           FROM workouts AS w
           WHERE w.id = :workoutId AND w.user_id = :userId
-      );
+      )
+      ORDER BY date;
     `, { workoutId, userId });
     return res.json(rows);
   }

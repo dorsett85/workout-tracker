@@ -28,7 +28,8 @@ module.exports = async function deleteWorkout(req, res) {
             ON wr.date_id = wd.id
         INNER JOIN exercises ex
             ON wr.exercise_id = ex.id
-    WHERE wr.workout_id = ?;
+    WHERE wr.workout_id = ?
+    ORDER BY date;
   `, workoutId);
   return res.json(rows);
 };
