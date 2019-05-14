@@ -29,7 +29,7 @@ const getWorkoutSeries = (workoutData) => {
     workoutData.forEach((workout) => {
       const { date } = workout.date;
       const { value } = workout[key];
-      series.data.push([date, parseInt(value, 10)]);
+      series.data.push([date.getTime(), parseInt(value, 10)]);
     });
 
     // Push to and return the new accumulator
