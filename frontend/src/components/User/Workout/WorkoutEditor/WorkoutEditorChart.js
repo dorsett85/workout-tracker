@@ -126,7 +126,8 @@ const createChart = (workoutData) => {
         label: {
           connectorAllowed: false
         },
-        pointStart: 2010
+        pointStart: 2010,
+        connectNulls: true
       }
     },
 
