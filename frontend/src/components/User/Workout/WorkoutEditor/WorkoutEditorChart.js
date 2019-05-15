@@ -41,7 +41,7 @@ const getWorkoutSeries = (workoutData) => {
   return chartData;
 };
 
-// onMousEenter function for the chart title (plain text to work with highcharts)
+// onMousOver function for the chart title (plain text to work with highcharts)
 const onMouseOverInfo = `
   (() => {
     const infoEl = document.getElementById('chartTitleInfo');
@@ -54,7 +54,7 @@ const onMouseOverInfo = `
   })()
 `;
 
-// Mouseenter function for the chart title (plain text to work with highcharts)
+// onMousLeave function for the chart title (plain text to work with highcharts)
 const onMouseLeaveInfo = `
   (() => {
     document.getElementById('chartInfoAlert').remove();
