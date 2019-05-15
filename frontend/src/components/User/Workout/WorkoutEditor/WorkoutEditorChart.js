@@ -2,6 +2,7 @@ import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import Highcharts from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
+import appStyles from 'assets/css/app.scss';
 import styles from './workoutEditor.scss';
 
 // Initialize highcharts exporting module
@@ -29,7 +30,7 @@ const getWorkoutSeries = (workoutData) => {
     workoutData.forEach((workout) => {
       const { date } = workout.date;
       const { value } = workout[key];
-      series.data.push([date.getTime(), parseInt(value, 10)]);
+      series.data.push([date.getTime(), parseFloat(value, 10)]);
     });
 
     // Push to and return the new accumulator
@@ -39,6 +40,20 @@ const getWorkoutSeries = (workoutData) => {
 
   return chartData;
 };
+
+// onMousEenter function for the chart title
+const onMouseOverInfo = () => {
+  const infoEl = document.getElementById('chartTitleInfo');
+  const chartInfoAlert = document.createElement('div');
+  chartInfoAlert.id = 'chartInfoAlert';
+  chartInfoAlert.classList.add('alert', 'alert-warning', 'p-2', 'text-center');
+  chartInfoAlert.style.boxShadow = '2px 2px 6px 0px grey';
+  chartInfoAlert.innerHTML = '<small>Use numbers in the table<br>for better chart progress</small>';
+  infoEl.insertAdjacentElement('afterEnd', chartInfoAlert);
+};
+
+// Mouseenter function for the chart title
+const onMouseLeaveInfo = () => document.getElementById('chartInfoAlert').remove();
 
 const createChart = (workoutData) => {
   if (!workoutData.length) {
@@ -63,7 +78,20 @@ const createChart = (workoutData) => {
   Highcharts.chart('workoutChartContainer', {
 
     title: {
-      text: 'Workout Progress'
+      text: `
+        <span>
+          Workout Progress
+          <sup
+            id="chartTitleInfo"
+            class="${appStyles.cursorPointer}"
+            onmouseover="(${onMouseOverInfo.toString()})()"
+            onmouseleave="(${onMouseLeaveInfo.toString()})()"
+          >
+            ⓘ
+          </sup>
+        </span>
+      `,
+      useHTML: true
     },
 
     subtitle: {
@@ -81,14 +109,16 @@ const createChart = (workoutData) => {
     },
 
     legend: {
+      title: {
+        text: 'Exercises',
+      },
       layout: 'vertical',
       align: 'right',
       verticalAlign: 'middle'
     },
 
     tooltip: {
-      xDateFormat: '%A, %B %d, %l:%M%P',
-      shared: true
+      xDateFormat: '%A, %B %d, %l:%M%P'
     },
 
     plotOptions: {
