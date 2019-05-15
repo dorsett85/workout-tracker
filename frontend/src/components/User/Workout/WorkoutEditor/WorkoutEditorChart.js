@@ -41,7 +41,7 @@ const getWorkoutSeries = (workoutData) => {
   return chartData;
 };
 
-// onMousEenter function for the chart title
+// onMousEenter function for the chart title (plain text to work with highcharts)
 const onMouseOverInfo = `
   (() => {
     const infoEl = document.getElementById('chartTitleInfo');
@@ -51,12 +51,12 @@ const onMouseOverInfo = `
     chartInfoAlert.style.boxShadow = '2px 2px 6px 0px grey';
     chartInfoAlert.innerHTML = '<small>Use numbers in the table<br>for better chart progress</small>';
     infoEl.insertAdjacentElement('afterEnd', chartInfoAlert);
-  })()
+  })();
 `;
 
-// Mouseenter function for the chart title
+// Mouseenter function for the chart title (plain text to work with highcharts)
 const onMouseLeaveInfo = `
-  (() => document.getElementById('chartInfoAlert').remove())()
+  document.getElementById('chartInfoAlert').remove();
 `;
 
 const createChart = (workoutData) => {
@@ -89,7 +89,7 @@ const createChart = (workoutData) => {
             id="chartTitleInfo"
             class="${appStyles.cursorPointer}"
             onmouseover="${onMouseOverInfo}"
-            onmouseleave="(${onMouseLeaveInfo.toString()})()"
+            onmouseleave="${onMouseLeaveInfo}"
           >
             ⓘ
           </sup>
