@@ -55,7 +55,9 @@ const onMouseOverInfo = `
 `;
 
 // Mouseenter function for the chart title
-const onMouseLeaveInfo = () => document.getElementById('chartInfoAlert').remove();
+const onMouseLeaveInfo = `
+  (() => document.getElementById('chartInfoAlert').remove())()
+`;
 
 const createChart = (workoutData) => {
   if (!workoutData.length) {
