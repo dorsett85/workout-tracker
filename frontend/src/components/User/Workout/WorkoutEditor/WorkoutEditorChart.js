@@ -42,15 +42,17 @@ const getWorkoutSeries = (workoutData) => {
 };
 
 // onMousEenter function for the chart title
-const onMouseOverInfo = () => {
-  const infoEl = document.getElementById('chartTitleInfo');
-  const chartInfoAlert = document.createElement('div');
-  chartInfoAlert.id = 'chartInfoAlert';
-  chartInfoAlert.classList.add('alert', 'alert-warning', 'p-2', 'text-center');
-  chartInfoAlert.style.boxShadow = '2px 2px 6px 0px grey';
-  chartInfoAlert.innerHTML = '<small>Use numbers in the table<br>for better chart progress</small>';
-  infoEl.insertAdjacentElement('afterEnd', chartInfoAlert);
-};
+const onMouseOverInfo = `
+  (() => {
+    const infoEl = document.getElementById('chartTitleInfo');
+    const chartInfoAlert = document.createElement('div');
+    chartInfoAlert.id = 'chartInfoAlert';
+    chartInfoAlert.classList.add('alert', 'alert-warning', 'p-2', 'text-center');
+    chartInfoAlert.style.boxShadow = '2px 2px 6px 0px grey';
+    chartInfoAlert.innerHTML = '<small>Use numbers in the table<br>for better chart progress</small>';
+    infoEl.insertAdjacentElement('afterEnd', chartInfoAlert);
+  })()
+`;
 
 // Mouseenter function for the chart title
 const onMouseLeaveInfo = () => document.getElementById('chartInfoAlert').remove();
@@ -84,7 +86,7 @@ const createChart = (workoutData) => {
           <sup
             id="chartTitleInfo"
             class="${appStyles.cursorPointer}"
-            onmouseover="(${onMouseOverInfo.toString()})()"
+            onmouseover="${onMouseOverInfo}"
             onmouseleave="(${onMouseLeaveInfo.toString()})()"
           >
             ⓘ
