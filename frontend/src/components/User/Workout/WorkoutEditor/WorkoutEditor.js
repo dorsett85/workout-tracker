@@ -34,7 +34,7 @@ const WorkoutEditor = (props) => {
         <Tab eventKey="table" title="Table">
           <Row className="mt-3">
             <Col>
-              <div className={`${styles.tableContainer} rounded`}>
+              <div className={`${styles.tableContainer} pb-5 rounded`}>
                 <Table variant="dark" size="sm" striped bordered hover>
                   <TableHeader id={id} workoutData={workoutData} dispatch={dispatch} />
                   <TableBody id={id} workoutData={workoutData} dispatch={dispatch} />
