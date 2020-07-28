@@ -46,4 +46,4 @@ https://rollout.io/blog/running-node-js-linux-systemd/
 
 And last, use this tutorial for setting up nginx (starting from "Step 4 — Setting Up Nginx as a Reverse Proxy Server"):
 
-Step 4 — Setting Up Nginx as a Reverse Proxy Server
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-20-04
