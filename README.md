@@ -30,7 +30,7 @@ vim .env.json
 psql -d postgres
 CREATE DATABASE workout_tracker;
 ALTER DATABASE workout_tracker OWNER TO clayton;
-\q;
+\q
 
 # Run migrations
 npx knex --knexfile backend/db/knexfile.js  migrate:latest
